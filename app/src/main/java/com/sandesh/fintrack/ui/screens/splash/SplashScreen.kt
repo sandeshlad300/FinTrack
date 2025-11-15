@@ -1,0 +1,113 @@
+package com.sandesh.fintrack.ui.screens.splash
+
+
+import android.R
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+@Composable
+fun SplashScreen(
+    viewModel: SplashViewModel,
+    onNavigate: () -> Unit
+) {
+    val state = viewModel.uiState.collectAsState()
+
+    // animation trigger
+    var visible by remember { mutableStateOf(false) }
+
+    // Start animation immediately
+    LaunchedEffect(Unit) {
+        visible = true
+        viewModel.onEvent(SplashEvent.Start)
+        viewModel.effect.collect {
+            when (it) {
+                SplashEffect.NavigateToIntro -> onNavigate()
+            }
+        }
+    }
+
+    val gradient = Brush.verticalGradient(
+        listOf(
+            Color(0xFF7B2FFF),  // Purple top
+            Color(0xFF2D6CDF),  // Blue mid
+            Color(0xFF05C7A5)   // Teal bottom
+        )
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(gradient),
+        contentAlignment = Alignment.Center
+    ) {
+
+        AnimatedVisibility(
+            visible = visible,
+            enter = fadeIn() + slideInVertically(initialOffsetY = { 40 }),
+            exit = fadeOut() + slideOutVertically(targetOffsetY = { -40 })
+        ) {
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+
+                // Logo Box
+                Box(
+                    modifier = Modifier
+                        .size(90.dp)
+                        .background(
+                            color = Color(0x44FFFFFF),
+                            shape = RoundedCornerShape(22.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.mipmap.fintrack_logo),
+                        contentDescription = "FinTrack Logo",
+                        modifier = Modifier.size(80.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // Title
+                Text(
+                    text = "FinTrack",
+                    fontSize = 42.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Subtitle
+                Text(
+                    text = "Track. Save. Grow.",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White.copy(alpha = 0.9f)
+                )
+            }
+        }
+    }
+}
