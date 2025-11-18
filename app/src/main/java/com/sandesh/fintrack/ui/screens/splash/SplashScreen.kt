@@ -1,7 +1,6 @@
 package com.sandesh.fintrack.ui.screens.splash
 
-
-import android.R
+import com.sandesh.fintrack.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -11,8 +10,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,8 +26,6 @@ fun SplashScreen(
     viewModel: SplashViewModel,
     onNavigate: () -> Unit
 ) {
-    val state = viewModel.uiState.collectAsState()
-
     // animation trigger
     var visible by remember { mutableStateOf(false) }
 
@@ -82,7 +77,7 @@ fun SplashScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = painterResource(id = R.mipmap.fintrack_logo),
+                        painter = painterResource(R.drawable.fintrack_logo),
                         contentDescription = "FinTrack Logo",
                         modifier = Modifier.size(80.dp)
                     )
