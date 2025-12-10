@@ -8,18 +8,43 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val LightColors = lightColorScheme(
-    primary = PrimaryColor,
-    background = BackgroundLight,
-    surface = BackgroundLight,
-    onPrimary = Color.White
+
+private val DarkColorScheme = darkColorScheme(
+    primary = PrimaryBlue,
+    onPrimary = TextPrimary,
+
+    secondary = TealAccent,
+    onSecondary = Color.Black,
+
+    background = DarkNavy,
+    onBackground = TextPrimary,
+
+    surface = NavySecondary,
+    onSurface = TextPrimary,
+
+    error = ErrorRed,
+    onError = TextPrimary,
+
+    outline = BorderBlue
 )
 
-private val DarkColors = darkColorScheme(
-    primary = PrimaryColor,
-    background = BackgroundDark,
-    surface = BackgroundDark,
-    onPrimary = Color.White
+private val LightColorScheme = lightColorScheme(
+    primary = PrimaryBlue,
+    onPrimary = TextPrimary,
+
+    secondary = TealAccent,
+    onSecondary = Color.Black,
+
+    background = Color(0xFFF4F7FA),
+    onBackground = Color(0xFF0D1526),
+
+    surface = Color.White,
+    onSurface = Color(0xFF0D1526),
+
+    error = ErrorRed,
+    onError = Color.White,
+
+    outline = PrimaryBlue
 )
 
 @Composable
@@ -27,11 +52,12 @@ fun FinTrackTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColors else LightColors
+    val color = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
+        colorScheme = color,
+        typography = FinTrackTypography,
+        shapes = FinTrackShapes,
         content = content
     )
 }
