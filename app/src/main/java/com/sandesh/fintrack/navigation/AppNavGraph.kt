@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.sandesh.fintrack.core.data.FirstLaunchStore
 import com.sandesh.fintrack.ui.screens.auth.RegistrationScreen
 import com.sandesh.fintrack.ui.screens.auth.RegistrationViewModel
+import com.sandesh.fintrack.ui.screens.dashboard.DashboardScreen
 import com.sandesh.fintrack.ui.screens.intro.IntroScreen
 import com.sandesh.fintrack.ui.screens.intro.IntroViewModel
 import com.sandesh.fintrack.ui.screens.intro.IntroViewModelFactory
@@ -41,7 +42,6 @@ fun AppNavGraph(
         composable(Screen.Intro.route) {
             val context = LocalContext.current
             val firstLaunchStore = remember { FirstLaunchStore(context) }
-
             val viewModel: IntroViewModel = viewModel(
                 factory = IntroViewModelFactory(
                     markFinished = {
@@ -68,9 +68,13 @@ fun AppNavGraph(
             RegistrationScreen (
                 viewModel = registrationViewModel,
                 onNavigateToDashboard = {
-                    navController.safeNavigate(Screen.Splash.route)
+                    navController.safeNavigate(Screen.Dashboard.route)
                 }
             )
+        }
+
+        composable(Screen.Dashboard.route) {
+            DashboardScreen ()
         }
     }
 }

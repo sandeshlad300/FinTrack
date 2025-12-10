@@ -4,7 +4,7 @@ package com.sandesh.fintrack.navigation
 sealed class Screen(val route: String) {
 
     object Splash : Screen("splash")
-    object Home : Screen("home")
+    object Dashboard : Screen("dashboard")
     object Intro : Screen("intro")
     object Registration : Screen("registration")
     object Transactions : Screen("transactions")

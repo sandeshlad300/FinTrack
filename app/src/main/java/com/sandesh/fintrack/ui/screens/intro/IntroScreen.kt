@@ -33,6 +33,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.sandesh.fintrack.ui.theme.DarkNavy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.collections.lastIndex
@@ -83,7 +84,7 @@ fun IntroScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(DarkNavy)
     ) {
         // ---------- FULLSCREEN PAGER ----------
         HorizontalPager(
