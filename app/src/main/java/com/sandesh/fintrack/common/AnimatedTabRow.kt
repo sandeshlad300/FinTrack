@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -34,7 +33,7 @@ fun AnimatedTabRow(
 ) {
     val tabs = listOf("Log In", "Register")
 
-    val tabWidth = 110.dp
+    val tabWidth = 150.dp
     val containerWidth = tabWidth * tabs.size
 
     val indicatorOffset by animateDpAsState(
@@ -70,10 +69,10 @@ fun AnimatedTabRow(
                     .height(45.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .shadow(
-                        elevation = 8.dp,                   // shadow strength
-                        shape = RoundedCornerShape(8.dp),  // same shape as indicator
-                        ambientColor = Color(0x33000000),   // faint grey (20% opacity)
-                        spotColor = Color(0x33000000)       // faint grey
+                        elevation = 8.dp,
+                        shape = RoundedCornerShape(8.dp),
+                        ambientColor = Color(0x33000000),
+                        spotColor = Color(0x33000000)
                     )
                     .background(Color(0xFF1877F2))
             )

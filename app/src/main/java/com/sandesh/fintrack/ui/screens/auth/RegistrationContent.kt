@@ -5,13 +5,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -33,12 +34,10 @@ fun RegistrationContent(
     email: String,
     password: String,
     confirmPassword: String,
-
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
-
-    passwordVisible: Boolean,
+    createPasswordVisible: Boolean,
     confirmPasswordVisible: Boolean,
     onTogglePassword: () -> Unit,
     onToggleConfirmPassword: () -> Unit,
@@ -47,7 +46,12 @@ fun RegistrationContent(
 ) {
 
     // ------------------------ EMAIL ------------------------
-    Text("Email", color = Color.White, fontSize = 14.sp)
+    Row(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("Email", color = Color.White, fontSize = 14.sp)
+    }
     Spacer(Modifier.height(8.dp))
 
     OutlinedTextField(
@@ -58,6 +62,7 @@ fun RegistrationContent(
             .fillMaxWidth()
             .height(55.dp),
         singleLine = true,
+        shape = RoundedCornerShape(12.dp),
         trailingIcon = {
             Icon(
                 imageVector = Icons.Default.Email,
@@ -76,7 +81,12 @@ fun RegistrationContent(
 
 
     // ------------------------ PASSWORD ------------------------
-    Text("Password", color = Color.White, fontSize = 14.sp)
+    Row(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("Password", color = Color.White, fontSize = 14.sp)
+    }
     Spacer(Modifier.height(8.dp))
 
     OutlinedTextField(
@@ -87,18 +97,19 @@ fun RegistrationContent(
             .fillMaxWidth()
             .height(55.dp),
         singleLine = true,
+        shape = RoundedCornerShape(12.dp),
         trailingIcon = {
             IconButton(onClick = onTogglePassword) {
                 Icon(
                     painter = painterResource(
-                        id = if (passwordVisible) R.drawable.eye else R.drawable.hidden
+                        id = if (createPasswordVisible) R.drawable.eye else R.drawable.hidden
                     ),
                     contentDescription = "Toggle Password Visibility",
                     tint = Color.Unspecified
                 )
             }
         },
-        visualTransformation = if (passwordVisible) VisualTransformation.None
+        visualTransformation = if (createPasswordVisible) VisualTransformation.None
         else PasswordVisualTransformation(),
         colors = textFieldColors()
     )
@@ -107,7 +118,12 @@ fun RegistrationContent(
 
 
     // ------------------------ CONFIRM PASSWORD ------------------------
+    Row(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
     Text("Confirm Password", color = Color.White, fontSize = 14.sp)
+        }
     Spacer(Modifier.height(8.dp))
 
     OutlinedTextField(
@@ -118,6 +134,7 @@ fun RegistrationContent(
             .fillMaxWidth()
             .height(55.dp),
         singleLine = true,
+        shape = RoundedCornerShape(12.dp),
         trailingIcon = {
             IconButton(onClick = onToggleConfirmPassword) {
                 Icon(
@@ -134,7 +151,7 @@ fun RegistrationContent(
         colors = textFieldColors()
     )
 
-    Spacer(Modifier.height(28.dp))
+    Spacer(Modifier.height(32.dp))
 
 
     // ------------------------ REGISTER BUTTON ------------------------
@@ -142,9 +159,14 @@ fun RegistrationContent(
     FTButton(
         text = "Register",
         onClick = {
-            onRegisterClick
-        }
+            onRegisterClick()
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .imePadding()
     )
+
+
 }
 
 // ------------------------ Reusable Colors ------------------------

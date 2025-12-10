@@ -19,20 +19,20 @@ sealed class AuthEvent {
     data class EmailChanged(val value: String) : AuthEvent()
     data class PasswordChanged(val value: String) : AuthEvent()
     data class ConfirmPasswordChanged(val value: String) : AuthEvent()
-
-
     object TogglePasswordVisibility : AuthEvent()
+    object ToggleCreatePasswordVisibility : AuthEvent()
     object ToggleConfirmPasswordVisibility : AuthEvent()
-
     object TogglePassword : AuthEvent()
-
     object SubmitLogin : AuthEvent()
     object SubmitRegistration : AuthEvent()
-
     object ClearError : AuthEvent()
+    object ClearAllFields : AuthEvent()
+    data object ForgotPasswordClicked : AuthEvent()
 }
 
 
 sealed class AuthEffect {
     object NavigateToDashboard : AuthEffect()
+    data class ShowError(val message: String) : AuthEffect()
+    data class ShowSuccess(val message: String) : AuthEffect()
 }

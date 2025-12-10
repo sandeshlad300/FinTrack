@@ -1,6 +1,7 @@
 package com.sandesh.fintrack.ui.screens.auth
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -39,8 +41,8 @@ fun LoginContent(
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onTogglePassword: () -> Unit,
-    onToggleBiometric: (Boolean) -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit
 ) {
     Row(
         Modifier.fillMaxWidth(),
@@ -65,6 +67,7 @@ fun LoginContent(
                 tint = Color.Gray
             )
         },
+        shape = RoundedCornerShape(12.dp),
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = Color(0xFF2E3A55),
             focusedBorderColor = Color(0xFF5DA8FF),
@@ -115,6 +118,7 @@ fun LoginContent(
         },
         visualTransformation = if (passwordVisible) VisualTransformation.None
         else PasswordVisualTransformation(),
+        shape = RoundedCornerShape(12.dp),
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = Color(0xFF2E3A55),
             focusedBorderColor = Color(0xFF5DA8FF),
@@ -131,7 +135,10 @@ fun LoginContent(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     ) {
-        Text("Forgot Password?", color = Color(0xFF5DA8FF))
+        Text("Forgot Password?",
+            color = Color(0xFF5DA8FF),
+            modifier = Modifier.clickable { onForgotPasswordClick() }
+        )
     }
 
     Spacer(Modifier.height(32.dp))
@@ -140,7 +147,7 @@ fun LoginContent(
     FTButton(
         text = "Log In",
         onClick = {
-            onLoginClick
+            onLoginClick()
         }
     )
     Spacer(Modifier.height(20.dp))
