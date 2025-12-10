@@ -3,9 +3,28 @@ package com.sandesh.fintrack.ui.theme
 import androidx.compose.ui.graphics.Color
 
 
-val PurpleGradient = Color(0xFF6D28D9)
-val TealGradient = Color(0xFF14B8A6)
 
-val PrimaryColor = Color(0xFF1313EC)
-val BackgroundLight = Color(0xFFF6F6F8)
-val BackgroundDark = Color(0xFF101022)
+// BRAND COLORS
+val PrimaryBlue = Color(0xFF2D6CDF)
+val TealAccent = Color(0xFF34E0C4)
+val NeonPurple = Color(0xFF7B2FFF)
+val AccentGradient = listOf(NeonPurple, PrimaryBlue)
+
+// BACKGROUND
+val DarkNavy = Color(0xFF0D1526)       // Main app background
+val NavySecondary = Color(0xFF152238)  // Cards, input fields
+
+// TEXT
+val TextPrimary = Color(0xFFFFFFFF)
+val TextSecondary = Color(0xFFA8B3C8)
+val TextDisabled = Color(0xFF6C7A92)
+
+// BORDER
+val BorderBlue = Color(0xFF5DA8FF)
+
+// FEEDBACK
+val ErrorRed = Color(0xFFFF5252)
+val SuccessGreen = Color(0xFF2ECC71)
+
+// BUTTON
+val ButtonColors = Color(0xFF5DA8FF)

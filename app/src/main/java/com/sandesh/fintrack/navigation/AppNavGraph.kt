@@ -1,11 +1,19 @@
 package com.sandesh.fintrack.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.sandesh.fintrack.core.data.FirstLaunchStore
+import com.sandesh.fintrack.ui.screens.auth.RegistrationScreen
+import com.sandesh.fintrack.ui.screens.auth.RegistrationViewModel
 import com.sandesh.fintrack.ui.screens.intro.IntroScreen
+import com.sandesh.fintrack.ui.screens.intro.IntroViewModel
+import com.sandesh.fintrack.ui.screens.intro.IntroViewModelFactory
+import com.sandesh.fintrack.ui.screens.intro.introPages
 import com.sandesh.fintrack.ui.screens.splash.SplashScreen
 import com.sandesh.fintrack.ui.screens.splash.SplashViewModel
 
@@ -30,6 +38,39 @@ fun AppNavGraph(
             )
         }
 
-        composable(Screen.Intro.route) { IntroScreen() }
+        composable(Screen.Intro.route) {
+            val context = LocalContext.current
+            val firstLaunchStore = remember { FirstLaunchStore(context) }
+
+            val viewModel: IntroViewModel = viewModel(
+                factory = IntroViewModelFactory(
+                    markFinished = {
+                        firstLaunchStore.setOnboardingShown(true)
+                    },
+                    totalPages = 3
+                )
+            )
+
+            IntroScreen(
+                pages = introPages,
+                viewModel = viewModel,
+                onNavigateToLogin = {
+                    navController.navigate(Screen.Registration.route) {
+                        popUpTo(Screen.Intro.route) { inclusive = true }
+                    }
+                }
+            )
+
+        }
+
+        composable(Screen.Registration.route) { backStackEntry ->
+            val registrationViewModel: RegistrationViewModel = viewModel(backStackEntry)
+            RegistrationScreen (
+                viewModel = registrationViewModel,
+                onNavigateToDashboard = {
+                    navController.safeNavigate(Screen.Splash.route)
+                }
+            )
+        }
     }
 }
