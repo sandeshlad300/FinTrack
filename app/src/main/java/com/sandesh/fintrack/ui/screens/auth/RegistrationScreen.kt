@@ -1,7 +1,6 @@
 package com.sandesh.fintrack.ui.screens.auth
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,7 +41,7 @@ import com.sandesh.fintrack.ui.theme.DarkNavy
 @Composable
 fun RegistrationScreen(
     viewModel: RegistrationViewModel,
-    onNavigateToDashboard: () -> Unit
+    onNavigateToDashboard: (String) -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
     val effectFlow = viewModel.effect
@@ -54,7 +53,9 @@ fun RegistrationScreen(
     LaunchedEffect(effectFlow) {
         effectFlow.collect { effect ->
             when (effect) {
-                is AuthEffect.NavigateToDashboard -> onNavigateToDashboard()
+                is AuthEffect.NavigateToDashboard ->
+                    onNavigateToDashboard(effect.name)
+
                 is AuthEffect.ShowSuccess -> {
                     snackbarHostState.showSnackbar(
                         message = effect.message,
@@ -131,6 +132,8 @@ fun RegistrationScreen(
                 )
             } else {
                 RegistrationContent(
+                    name = state.name,
+                    onNameChange = { viewModel.onEvent(AuthEvent.NameChanged(it)) },
                     email = state.email,
                     password = state.password,
                     confirmPassword = state.confirmPassword,

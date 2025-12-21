@@ -5,12 +5,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.sandesh.fintrack.core.data.FirstLaunchStore
 import com.sandesh.fintrack.ui.screens.auth.RegistrationScreen
 import com.sandesh.fintrack.ui.screens.auth.RegistrationViewModel
 import com.sandesh.fintrack.ui.screens.dashboard.DashboardScreen
+import com.sandesh.fintrack.ui.screens.dashboard.MainDashboardScreen
 import com.sandesh.fintrack.ui.screens.intro.IntroScreen
 import com.sandesh.fintrack.ui.screens.intro.IntroViewModel
 import com.sandesh.fintrack.ui.screens.intro.IntroViewModelFactory
@@ -65,16 +68,27 @@ fun AppNavGraph(
 
         composable(Screen.Registration.route) { backStackEntry ->
             val registrationViewModel: RegistrationViewModel = viewModel(backStackEntry)
-            RegistrationScreen (
+
+            RegistrationScreen(
                 viewModel = registrationViewModel,
-                onNavigateToDashboard = {
-                    navController.safeNavigate(Screen.Dashboard.route)
+                onNavigateToDashboard = { name ->
+                    navController.safeNavigate(
+                        Screen.Dashboard.passName(name)
+                    )
                 }
             )
         }
 
-        composable(Screen.Dashboard.route) {
-            DashboardScreen ()
+
+        composable(
+            route = Screen.Dashboard.route,
+            arguments = listOf(navArgument("name") { type = NavType.StringType })
+        ) { entry ->
+
+            val name = entry.arguments?.getString("name") ?: "User"
+            MainDashboardScreen(name = name)
         }
+
+
     }
 }
