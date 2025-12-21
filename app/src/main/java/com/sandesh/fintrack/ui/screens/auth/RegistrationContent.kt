@@ -13,6 +13,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -31,6 +32,8 @@ import com.sandesh.fintrack.common.FTButton
 
 @Composable
 fun RegistrationContent(
+    name: String,
+    onNameChange: (String) -> Unit,
     email: String,
     password: String,
     confirmPassword: String,
@@ -41,9 +44,42 @@ fun RegistrationContent(
     confirmPasswordVisible: Boolean,
     onTogglePassword: () -> Unit,
     onToggleConfirmPassword: () -> Unit,
-
     onRegisterClick: () -> Unit
 ) {
+
+    // ------------------------ NAME ------------------------
+    Row(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("Name", color = Color.White, fontSize = 14.sp)
+    }
+    Spacer(Modifier.height(8.dp))
+
+    OutlinedTextField(
+        value = name,
+        onValueChange = onNameChange,
+        placeholder = { Text("Enter your name", color = Color.LightGray) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(55.dp),
+        singleLine = true,
+        shape = RoundedCornerShape(12.dp),
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Default.AccountCircle,
+                contentDescription = "Name Icon",
+                tint = Color.Gray
+            )
+        },
+        colors = textFieldColors(),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
+        )
+    )
+
+    Spacer(Modifier.height(24.dp))
 
     // ------------------------ EMAIL ------------------------
     Row(
@@ -111,7 +147,11 @@ fun RegistrationContent(
         },
         visualTransformation = if (createPasswordVisible) VisualTransformation.None
         else PasswordVisualTransformation(),
-        colors = textFieldColors()
+        colors = textFieldColors(),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Next
+        )
     )
 
     Spacer(Modifier.height(24.dp))
@@ -148,7 +188,11 @@ fun RegistrationContent(
         },
         visualTransformation = if (confirmPasswordVisible) VisualTransformation.None
         else PasswordVisualTransformation(),
-        colors = textFieldColors()
+        colors = textFieldColors(),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done
+        )
     )
 
     Spacer(Modifier.height(32.dp))

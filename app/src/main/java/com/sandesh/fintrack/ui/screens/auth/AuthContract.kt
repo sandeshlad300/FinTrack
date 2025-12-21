@@ -2,6 +2,7 @@ package com.sandesh.fintrack.ui.screens.auth
 
 data class AuthState(
     val email: String = "",
+    val name: String = "",
     val password: String = "",
     val confirmPassword: String = "",
     val passwordVisible: Boolean = false,
@@ -17,6 +18,7 @@ data class AuthState(
 
 sealed class AuthEvent {
     data class EmailChanged(val value: String) : AuthEvent()
+    data class NameChanged(val value: String) : AuthEvent()
     data class PasswordChanged(val value: String) : AuthEvent()
     data class ConfirmPasswordChanged(val value: String) : AuthEvent()
     object TogglePasswordVisibility : AuthEvent()
@@ -32,7 +34,7 @@ sealed class AuthEvent {
 
 
 sealed class AuthEffect {
-    object NavigateToDashboard : AuthEffect()
+    data class NavigateToDashboard(val name: String) : AuthEffect()
     data class ShowError(val message: String) : AuthEffect()
     data class ShowSuccess(val message: String) : AuthEffect()
 }
