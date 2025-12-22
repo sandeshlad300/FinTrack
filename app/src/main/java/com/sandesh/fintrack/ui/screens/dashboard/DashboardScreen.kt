@@ -20,11 +20,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun DashboardScreen(
     modifier: Modifier = Modifier,
-    name: String
+    name: String,
+    onAddTransactionClick: () -> Unit
 ) {
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
 
         Column(
             modifier = Modifier
@@ -33,28 +32,24 @@ fun DashboardScreen(
                 .padding(horizontal = 18.dp)
                 .padding(innerPadding)
         ) {
+
             GreetingHeader(name = name)
             Spacer(Modifier.height(20.dp))
 
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 20.dp, top = 0.dp),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(26.dp)
             ) {
                 item { BalanceCard() }
 
                 item {
-                    QuickActionsSection()
+                    QuickActionsSection(
+                        onAddTransactionClick = onAddTransactionClick
+                    )
                 }
 
-                item {
-                    RecentTransactionSection()
-                }
-
-                item {
-                    Spacer(Modifier.height(8.dp))
-                }
+                item { RecentTransactionSection() }
             }
         }
     }

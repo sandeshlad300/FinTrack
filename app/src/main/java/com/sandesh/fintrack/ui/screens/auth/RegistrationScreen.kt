@@ -108,13 +108,11 @@ fun RegistrationScreen(
             Spacer(Modifier.height(30.dp))
 
             AnimatedTabRow(
+                tabs = listOf("Log In", "Register"),
                 selectedTab = selectedTab,
-                onTabSelected = { tabIndex ->
-                    selectedTab = tabIndex
-                    // Clear all fields when tab switches
-                    viewModel.onEvent(AuthEvent.ClearAllFields)
-                }
+                onTabSelected = { selectedTab = it }
             )
+
 
             Spacer(Modifier.height(25.dp))
 

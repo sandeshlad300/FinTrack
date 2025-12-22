@@ -20,6 +20,7 @@ import com.sandesh.fintrack.ui.screens.intro.IntroViewModelFactory
 import com.sandesh.fintrack.ui.screens.intro.introPages
 import com.sandesh.fintrack.ui.screens.splash.SplashScreen
 import com.sandesh.fintrack.ui.screens.splash.SplashViewModel
+import com.sandesh.fintrack.ui.screens.transaction.addTransaction.AddTransactionScreen
 
 
 @Composable
@@ -37,7 +38,7 @@ fun AppNavGraph(
             SplashScreen(
                 viewModel = splashViewModel,
                 onNavigate = {
-                    navController.safeNavigate(Screen.Intro.route)
+                    navController.safeNavigate(Screen.Dashboard.route)
                 }
             )
         }
@@ -82,11 +83,27 @@ fun AppNavGraph(
 
         composable(
             route = Screen.Dashboard.route,
-            arguments = listOf(navArgument("name") { type = NavType.StringType })
+            arguments = listOf(
+                navArgument("name") { type = NavType.StringType }
+            )
         ) { entry ->
 
             val name = entry.arguments?.getString("name") ?: "User"
-            MainDashboardScreen(name = name)
+
+            //PASS navController
+            MainDashboardScreen(
+                name = name,
+                navController = navController
+            )
+        }
+
+
+        //ADD TRANSACTION DESTINATION
+        composable(Screen.AddTransactions.route) {
+            AddTransactionScreen(
+                onBack = { navController.popBackStack() },
+                onSave = { navController.popBackStack() }
+            )
         }
 
 
