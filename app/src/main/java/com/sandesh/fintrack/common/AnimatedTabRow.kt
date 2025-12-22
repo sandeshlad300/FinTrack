@@ -22,82 +22,88 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 
 @Composable
 fun AnimatedTabRow(
+    tabs: List<String>,
     selectedTab: Int,
-    onTabSelected: (Int) -> Unit
+    onTabSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    tabHeight: Dp = 45.dp,
+    cornerRadius: Dp = 8.dp,
+    backgroundColor: Color = Color.White,
+    indicatorColor: Color = Color(0xFF1877F2),
+    selectedTextColor: Color = Color.White,
+    unSelectedTextColor: Color = Color(0xFF1E88E5)
 ) {
-    val tabs = listOf("Log In", "Register")
-
     val tabWidth = 150.dp
     val containerWidth = tabWidth * tabs.size
 
     val indicatorOffset by animateDpAsState(
         targetValue = selectedTab * tabWidth,
-        animationSpec = tween(300, easing = FastOutSlowInEasing)
+        animationSpec = tween(
+            durationMillis = 300,
+            easing = FastOutSlowInEasing
+        ),
+        label = "TabIndicator"
     )
 
-    // OUTER CONTAINER (center whole row)
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
 
-        // INNER BOX (left-based layout)
-        Box(
-            modifier = Modifier.width(containerWidth)
-        ) {
+        Box(modifier = Modifier.width(containerWidth)) {
 
-            // BACKGROUND
+            // Background
             Box(
                 modifier = Modifier
                     .width(containerWidth)
-                    .height(45.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color(0xFFffffff))
+                    .height(tabHeight)
+                    .clip(RoundedCornerShape(cornerRadius))
+                    .background(backgroundColor)
             )
 
-            // SLIDING INDICATOR (NOW ALWAYS LEFT-ALIGNED)
+            // Indicator
             Box(
                 modifier = Modifier
                     .offset(x = indicatorOffset)
                     .width(tabWidth)
-                    .height(45.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .height(tabHeight)
+                    .clip(RoundedCornerShape(cornerRadius))
                     .shadow(
                         elevation = 8.dp,
-                        shape = RoundedCornerShape(8.dp),
-                        ambientColor = Color(0x33000000),
-                        spotColor = Color(0x33000000)
+                        shape = RoundedCornerShape(cornerRadius)
                     )
-                    .background(Color(0xFF1877F2))
+                    .background(indicatorColor)
             )
 
-            // TABS
+            // Tabs
             Row(
                 modifier = Modifier
                     .width(containerWidth)
-                    .height(45.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                    .height(tabHeight)
             ) {
-                tabs.forEachIndexed { index, text ->
+                tabs.forEachIndexed { index, title ->
                     Box(
                         modifier = Modifier
                             .width(tabWidth)
-                            .height(45.dp)
+                            .height(tabHeight)
                             .clickable { onTabSelected(index) },
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = text,
+                            text = title,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = if (selectedTab == index) Color.White else Color(0xFF1E88E5)
+                            color = if (selectedTab == index)
+                                selectedTextColor
+                            else
+                                unSelectedTextColor
                         )
                     }
                 }
@@ -105,3 +111,4 @@ fun AnimatedTabRow(
         }
     }
 }
+

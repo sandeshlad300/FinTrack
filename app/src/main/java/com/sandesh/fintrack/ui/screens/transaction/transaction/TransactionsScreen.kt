@@ -34,9 +34,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sandesh.fintrack.ui.screens.transaction.commonComponent.FiltersRow
-import com.sandesh.fintrack.ui.screens.transaction.commonComponent.SectionTitle
-import com.sandesh.fintrack.ui.screens.transaction.commonComponent.TransactionCard
+import com.sandesh.fintrack.common.transaction.FiltersRow
+import com.sandesh.fintrack.common.transaction.SectionTitle
+import com.sandesh.fintrack.common.transaction.TransactionCard
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
