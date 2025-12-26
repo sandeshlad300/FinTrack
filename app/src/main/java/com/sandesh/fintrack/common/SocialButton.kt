@@ -27,7 +27,8 @@ fun FTButton(
     text: String,
     modifier: Modifier = Modifier,
     background: Color = ButtonColors,   // Your UI card field background
-    textColor: Color = TextPrimary,      // White text
+    textColor: Color = TextPrimary,     // White text
+    loading: Boolean = false,           // Loader flag
     onClick: () -> Unit
 ) {
     Surface(
@@ -37,7 +38,9 @@ fun FTButton(
         shape = RoundedCornerShape(12.dp),
         color = background,
         shadowElevation = 0.dp,
-        onClick = onClick
+        onClick = {
+            if (!loading) onClick()  // prevent clicks when loading
+        }
     ) {
 
         Row(
@@ -46,24 +49,31 @@ fun FTButton(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            // Only show icon if provided
-            icon?.let {
-                Image(
-                    painter = painterResource(id = it),
-                    contentDescription = null,
-                    modifier = Modifier.size(22.dp),
-                    colorFilter = ColorFilter.tint(TextPrimary) // icon colored same as text
+            if (loading) {
+                androidx.compose.material3.CircularProgressIndicator(
+                    color = textColor,
+                    strokeWidth = 2.dp,
+                    modifier = Modifier.size(20.dp)
                 )
+            } else {
+                // Only show icon if provided
+                icon?.let {
+                    Image(
+                        painter = painterResource(id = it),
+                        contentDescription = null,
+                        modifier = Modifier.size(22.dp),
+                        colorFilter = ColorFilter.tint(textColor) // icon colored same as text
+                    )
+                    Spacer(Modifier.width(12.dp))
+                }
 
-                Spacer(Modifier.width(12.dp))
+                Text(
+                    text = text,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = textColor
+                )
             }
-
-            Text(
-                text = text,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = textColor
-            )
         }
     }
 }

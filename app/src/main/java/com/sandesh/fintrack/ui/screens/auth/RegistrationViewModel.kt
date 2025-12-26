@@ -1,5 +1,6 @@
 package com.sandesh.fintrack.ui.screens.auth
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +23,10 @@ class RegistrationViewModel : ViewModel() {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
+
+    private val _name = MutableStateFlow("")
+    val name: StateFlow<String> = _name
+
 
     fun onEvent(event: AuthEvent) {
         when (event) {
@@ -154,6 +159,7 @@ class RegistrationViewModel : ViewModel() {
                 _effect.send(AuthEffect.ShowSuccess("Login Successful"))
                 _effect.send(AuthEffect.NavigateToDashboard(name))
 
+
             } catch (e: Exception) {
                 updateState { it.copy(loading = false) }
                 sendError(parseFirebaseError(e))
@@ -197,9 +203,9 @@ class RegistrationViewModel : ViewModel() {
                     .await()
 
                 updateState { it.copy(loading = false, success = true) }
-
+                Log.d("TAG", "register: register Name : ${name}")
                 _effect.send(AuthEffect.ShowSuccess("Account created successfully"))
-                _effect.send(AuthEffect.NavigateToDashboard(name))
+                _effect.send(AuthEffect.SwitchToLogin)
 
             } catch (e: Exception) {
                 updateState { it.copy(loading = false) }

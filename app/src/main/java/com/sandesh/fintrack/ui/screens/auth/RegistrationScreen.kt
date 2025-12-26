@@ -1,5 +1,6 @@
 package com.sandesh.fintrack.ui.screens.auth
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -51,10 +52,17 @@ fun RegistrationScreen(
 
     // ---------- Collect Effects ----------
     LaunchedEffect(effectFlow) {
+
         effectFlow.collect { effect ->
             when (effect) {
+
                 is AuthEffect.NavigateToDashboard ->
                     onNavigateToDashboard(effect.name)
+
+                AuthEffect.SwitchToLogin -> {
+                    selectedTab = 0   // 👈 LOGIN TAB
+                }
+
 
                 is AuthEffect.ShowSuccess -> {
                     snackbarHostState.showSnackbar(
@@ -62,6 +70,7 @@ fun RegistrationScreen(
                         actionLabel = "OK"
                     )
                 }
+
                 is AuthEffect.ShowError -> {
                     snackbarHostState.showSnackbar(
                         message = effect.message,
@@ -122,6 +131,7 @@ fun RegistrationScreen(
                     password = state.password,
                     passwordVisible = state.passwordVisible,
                     biometricEnabled = false,
+                    loading = state.loading,
                     onEmailChange = { viewModel.onEvent(AuthEvent.EmailChanged(it)) },
                     onPasswordChange = { viewModel.onEvent(AuthEvent.PasswordChanged(it)) },
                     onTogglePassword = { viewModel.onEvent(AuthEvent.TogglePassword) },
@@ -142,8 +152,10 @@ fun RegistrationScreen(
                     onConfirmPasswordChange = { viewModel.onEvent(AuthEvent.ConfirmPasswordChanged(it)) },
                     onTogglePassword = { viewModel.onEvent(AuthEvent.TogglePasswordVisibility) },
                     onToggleConfirmPassword = { viewModel.onEvent(AuthEvent.ToggleConfirmPasswordVisibility) },
-                    onRegisterClick = { viewModel.onEvent(AuthEvent.SubmitRegistration) }
-                )
+                    onRegisterClick = { viewModel.onEvent(AuthEvent.SubmitRegistration) },
+                    loading = state.loading
+                    )
+
             }
 
             Spacer(modifier = Modifier.weight(1f))
