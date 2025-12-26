@@ -1,5 +1,7 @@
 package com.sandesh.fintrack.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -10,9 +12,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.sandesh.fintrack.core.data.FirstLaunchStore
+import com.sandesh.fintrack.domain.TransactionRepositoryImpl
 import com.sandesh.fintrack.ui.screens.auth.RegistrationScreen
 import com.sandesh.fintrack.ui.screens.auth.RegistrationViewModel
-import com.sandesh.fintrack.ui.screens.dashboard.DashboardScreen
 import com.sandesh.fintrack.ui.screens.dashboard.MainDashboardScreen
 import com.sandesh.fintrack.ui.screens.intro.IntroScreen
 import com.sandesh.fintrack.ui.screens.intro.IntroViewModel
@@ -21,24 +23,31 @@ import com.sandesh.fintrack.ui.screens.intro.introPages
 import com.sandesh.fintrack.ui.screens.splash.SplashScreen
 import com.sandesh.fintrack.ui.screens.splash.SplashViewModel
 import com.sandesh.fintrack.ui.screens.transaction.addTransaction.AddTransactionScreen
+import com.sandesh.fintrack.ui.screens.transaction.room.AppDatabase
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavGraph(
     navController: NavHostController
 ) {
+
+    val context = LocalContext.current
+    val database = remember { AppDatabase.getInstance(context) }
+    val repository = remember { TransactionRepositoryImpl(database.transactionDao()) }
 
     NavHost(
         navController = navController,
         startDestination = Screen.Splash.route
     ) {
 
+
         composable(Screen.Splash.route) { backStackEntry ->
             val splashViewModel: SplashViewModel = viewModel(backStackEntry)
             SplashScreen(
                 viewModel = splashViewModel,
                 onNavigate = {
-                    navController.safeNavigate(Screen.Dashboard.route)
+                    navController.safeNavigate(Screen.Intro.route)
                 }
             )
         }
@@ -93,19 +102,35 @@ fun AppNavGraph(
             //PASS navController
             MainDashboardScreen(
                 name = name,
-                navController = navController
+                navController = navController,
+                onAddClick = {
+                    navController.navigate(Screen.AddTransactions.route)
+                }
             )
         }
 
 
-        //ADD TRANSACTION DESTINATION
+        // ADD TRANSACTION DESTINATION
         composable(Screen.AddTransactions.route) {
             AddTransactionScreen(
-                onBack = { navController.popBackStack() },
-                onSave = { navController.popBackStack() }
+                navController = navController,
+                repository = repository,
+                onBack = { navController.popBackStack() }
             )
         }
 
+// SUCCESS DESTINATION
+        composable(
+            route = "transaction_success/{transactionId}",
+            arguments = listOf(navArgument("transactionId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val transactionId = backStackEntry.arguments!!.getLong("transactionId")
+            TransactionSuccessRoute(
+                navController = navController,
+                repository = repository,
+                transactionId = transactionId
+            )
+        }
+    }
 
     }
-}

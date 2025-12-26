@@ -3,6 +3,7 @@ package com.sandesh.fintrack.ui.screens.intro
 import androidx.annotation.RawRes
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -150,7 +152,7 @@ fun IntroScreen(
                     color = Color.Gray
                 )
 
-                Button(
+                OutlinedButton(
                     onClick = {
                         scope.launch {
                             if (pagerState.currentPage < pages.lastIndex) {
@@ -163,15 +165,20 @@ fun IntroScreen(
                             }
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF34E0C4)),
+                    modifier = Modifier.width(160.dp),
                     shape = RoundedCornerShape(30.dp),
-                    modifier = Modifier.width(160.dp)
+                    border = BorderStroke(1.5.dp, Color(0xFF34E0C4)),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color(0xFF34E0C4)
+                    )
                 ) {
                     Text(
                         text = if (pagerState.currentPage == pages.lastIndex) "Get Started" else "Next",
-                        color = Color.Black
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
+
             }
         }
     }

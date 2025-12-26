@@ -1,7 +1,12 @@
 package com.sandesh.fintrack.ui.screens.transaction.addTransaction
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sandesh.fintrack.domain.TransactionModel
+import com.sandesh.fintrack.domain.TransactionRepository
+
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +15,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class AddTransactionViewModel : ViewModel() {
+class AddTransactionViewModel(
+    private val repository: TransactionRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(AddTransactionState())
     val state: StateFlow<AddTransactionState> = _state
@@ -18,6 +25,7 @@ class AddTransactionViewModel : ViewModel() {
     private val _effect = Channel<AddTransactionEffect>(Channel.BUFFERED)
     val effect = _effect.receiveAsFlow()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun onIntent(intent: AddTransactionIntent) {
         when (intent) {
 
@@ -28,20 +36,30 @@ class AddTransactionViewModel : ViewModel() {
             AddTransactionIntent.SaveClicked -> {
                 if (!state.value.isFormValid) return
 
-                _state.update {
-                    it.copy(isLoading = true)
-                }
-
                 viewModelScope.launch {
-                    delay(1200)
+                    _state.update { it.copy(isLoading = true) }
 
-                    _state.update {
-                        it.copy(isLoading = false)
-                    }
+                    delay(2000)
 
-                    sendEffect(AddTransactionEffect.SaveTransaction)
+                    val transactionId = repository.insert(
+                        TransactionModel(
+                            id = 0L,
+                            amount = state.value.amount.toDouble(),
+                            category = state.value.category,
+                            note = state.value.note,
+                            isIncome = state.value.isIncome,
+                            date = state.value.dateMillis
+                        )
+                    )
+
+                    _state.update { it.copy(isLoading = false) }
+
+                    sendEffect(
+                        AddTransactionEffect.NavigateToSuccess(transactionId)
+                    )
                 }
             }
+
 
 
             is AddTransactionIntent.TransactionTypeChanged -> {
@@ -113,19 +131,6 @@ class AddTransactionViewModel : ViewModel() {
         }
     }
 
-    private fun handleSave() {
-        val currentState = _state.value
-
-        if (!currentState.isAmountValid) {
-            _state.update {
-                it.copy(showAmountError = true)
-            }
-            return
-        }
-
-        sendEffect(AddTransactionEffect.SaveTransaction)
-    }
-
     private fun sendEffect(effect: AddTransactionEffect) {
         viewModelScope.launch {
             _effect.send(effect)
@@ -134,6 +139,13 @@ class AddTransactionViewModel : ViewModel() {
 
 }
 
+
+
+data class BalanceUiState(
+    val total: Double = 0.0,
+    val income: Double = 0.0,
+    val expense: Double = 0.0
+)
 
 
 

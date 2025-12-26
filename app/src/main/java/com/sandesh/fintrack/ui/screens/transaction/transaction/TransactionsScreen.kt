@@ -1,9 +1,13 @@
 package com.sandesh.fintrack.ui.screens.transaction.transaction
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -39,6 +43,7 @@ import com.sandesh.fintrack.common.transaction.SectionTitle
 import com.sandesh.fintrack.common.transaction.TransactionCard
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionsScreen(
@@ -120,20 +125,37 @@ fun TransactionsScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             // FILTER CHIPS
-            FiltersRow(state.selectedFilter) {
-                viewModel.onEvent(TransactionsEvent.OnFilterChange(it))
-            }
+            FiltersRow(
+                selected = state.selectedFilter,
+                onSelect = { filter ->
+                    viewModel.onEvent(
+                        TransactionsEvent.OnFilterChange(filter)
+                    )
+                }
+            )
+
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // LIST
-            LazyColumn(modifier = Modifier.weight(1f)) {
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(
+                    bottom = paddingValues.calculateBottomPadding() + 72.dp
+                )
+
+            ) {
 
                 item { SectionTitle("TODAY") }
                 items(state.todayList) { TransactionCard(it) }
 
                 item { SectionTitle("YESTERDAY") }
                 items(state.yesterdayList) { TransactionCard(it) }
+
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
             }
         }
     }
