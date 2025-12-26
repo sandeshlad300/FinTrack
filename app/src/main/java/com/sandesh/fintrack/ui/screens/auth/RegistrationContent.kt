@@ -44,7 +44,8 @@ fun RegistrationContent(
     confirmPasswordVisible: Boolean,
     onTogglePassword: () -> Unit,
     onToggleConfirmPassword: () -> Unit,
-    onRegisterClick: () -> Unit
+    onRegisterClick: () -> Unit,
+    loading: Boolean,
 ) {
 
     // ------------------------ NAME ------------------------
@@ -202,6 +203,7 @@ fun RegistrationContent(
 
     FTButton(
         text = "Register",
+        loading = loading,
         onClick = {
             onRegisterClick()
         },

@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sandesh.fintrack.domain.TransactionRepository
+import com.sandesh.fintrack.ui.screens.auth.RegistrationViewModel
 import com.sandesh.fintrack.ui.screens.dashboard.recentTransaction.RecentTransactionSection
 import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewModel
 import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewModelFactory
@@ -39,6 +40,7 @@ fun DashboardScreen(
         factory = TransactionsViewModelFactory(repository)
     )
     val state by viewModel.state.collectAsState()
+
 
     val recentTransactions = remember(
         state.todayList,

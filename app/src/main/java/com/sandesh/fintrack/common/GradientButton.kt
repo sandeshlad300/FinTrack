@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.sandesh.fintrack.ui.theme.ButtonColors
 import com.sandesh.fintrack.ui.theme.PrimaryBlue
 import com.sandesh.fintrack.ui.theme.TealAccent
 
@@ -31,6 +32,7 @@ fun GradientButton(
     text: String,
     enabled: Boolean = true,
     loading: Boolean = false,
+    buttonColor: Color = Color(0xFF6366F1),
     onClick: () -> Unit
 ) {
     Surface(
@@ -44,12 +46,7 @@ fun GradientButton(
     ) {
         Box(
             modifier = Modifier
-                .background(
-                    brush = Brush.horizontalGradient(
-                        listOf(PrimaryBlue, TealAccent)
-                    ),
-                    alpha = if (enabled) 1f else 0.4f
-                ),
+                .background(buttonColor.copy(alpha = if (enabled) 1f else 0.4f)),
             contentAlignment = Alignment.Center
         ) {
             Row(

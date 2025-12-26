@@ -7,10 +7,8 @@ data class AuthState(
     val confirmPassword: String = "",
     val passwordVisible: Boolean = false,
     val loading: Boolean = false,
-
     val createPasswordVisible: Boolean = false,
     val confirmPasswordVisible: Boolean = false,
-
     val errorMessage: String? = null,
     val success: Boolean = false
 )
@@ -35,6 +33,7 @@ sealed class AuthEvent {
 
 sealed class AuthEffect {
     data class NavigateToDashboard(val name: String) : AuthEffect()
+    object SwitchToLogin : AuthEffect()
     data class ShowError(val message: String) : AuthEffect()
     data class ShowSuccess(val message: String) : AuthEffect()
 }

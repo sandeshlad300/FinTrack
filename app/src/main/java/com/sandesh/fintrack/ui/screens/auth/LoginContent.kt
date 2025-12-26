@@ -39,6 +39,7 @@ fun LoginContent(
     password: String,
     passwordVisible: Boolean,
     biometricEnabled: Boolean,
+    loading: Boolean,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onTogglePassword: () -> Unit,
@@ -150,6 +151,7 @@ fun LoginContent(
     // Login Button
     FTButton(
         text = "Log In",
+        loading = loading,
         onClick = {
             keyboardController?.hide()
             onLoginClick()

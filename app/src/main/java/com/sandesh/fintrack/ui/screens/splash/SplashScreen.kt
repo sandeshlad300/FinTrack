@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sandesh.fintrack.common.AppVersionFooter
 
 @Composable
 fun SplashScreen(
@@ -77,7 +78,7 @@ fun SplashScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.fintrack_logo),
+                        painter = painterResource(R.drawable.app_icon),
                         contentDescription = "FinTrack Logo",
                         modifier = Modifier.size(80.dp)
                     )
@@ -102,7 +103,17 @@ fun SplashScreen(
                     fontWeight = FontWeight.Medium,
                     color = Color.White.copy(alpha = 0.9f)
                 )
+
+
+
             }
         }
+
+        AppVersionFooter(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 24.dp)
+        )
+
     }
 }
