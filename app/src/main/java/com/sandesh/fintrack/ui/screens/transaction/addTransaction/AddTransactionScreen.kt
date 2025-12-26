@@ -21,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -40,35 +39,39 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.sandesh.fintrack.common.AnimatedTabRow
 import com.sandesh.fintrack.common.GradientButton
 import com.sandesh.fintrack.common.transaction.AmountInput
-import com.sandesh.fintrack.common.transaction.AmountText
 import com.sandesh.fintrack.common.transaction.CategoryBottomSheet
 import com.sandesh.fintrack.common.transaction.CommonDropdown
 import com.sandesh.fintrack.common.transaction.DateField
 import com.sandesh.fintrack.common.transaction.DatePickerHandler
 import com.sandesh.fintrack.common.transaction.NoteField
 import com.sandesh.fintrack.common.transaction.SectionDivider
+import com.sandesh.fintrack.domain.TransactionRepository
+import com.sandesh.fintrack.navigation.Screen
 import com.sandesh.fintrack.ui.theme.PrimaryBlue
 import com.sandesh.fintrack.ui.theme.TealAccent
-import com.sandesh.fintrack.ui.theme.TextSecondary
 import java.text.DecimalFormat
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTransactionScreen(
-    onBack: () -> Unit,
-    onSave: () -> Unit
+    navController: NavController,
+    repository: TransactionRepository,
+    onBack: () -> Unit
 ) {
 
     val viewModel: AddTransactionViewModel = viewModel(
-        factory = AddTransactionViewModelFactory()
+        factory = AddTransactionViewModelFactory(repository)
     )
 
     val state by viewModel.state.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }
+
 
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -78,14 +81,22 @@ fun AddTransactionScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
+                is AddTransactionEffect.NavigateToSuccess -> {
+                    navController.navigate(
+                        Screen.TransactionSuccess.createRoute(effect.transactionId)
+                    ) {
+                        popUpTo(Screen.AddTransactions.route) { inclusive = true }
+                    }
+                }
                 AddTransactionEffect.NavigateBack -> onBack()
-                AddTransactionEffect.SaveTransaction -> onSave()
                 AddTransactionEffect.OpenDatePicker -> {
                     showDatePicker = true
                 }
             }
         }
     }
+
+
 
 
     if (showDatePicker) {
@@ -316,11 +327,3 @@ fun formatAmount(input: String): String {
     }
 }
 
-fun isValidAmount(input: String): Boolean {
-    if (input.isBlank()) return false
-    return try {
-        input.toDouble() > 0
-    } catch (e: Exception) {
-        false
-    }
-}

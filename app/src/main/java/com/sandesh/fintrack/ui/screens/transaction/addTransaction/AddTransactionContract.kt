@@ -1,5 +1,10 @@
 package com.sandesh.fintrack.ui.screens.transaction.addTransaction
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.sandesh.fintrack.common.parseDateToMillis
+import com.sandesh.fintrack.common.transaction.parseDateWithCurrentTimeToMillis
+
 sealed interface AddTransactionIntent {
     object BackClicked : AddTransactionIntent
     object SaveClicked : AddTransactionIntent
@@ -38,12 +43,19 @@ data class AddTransactionState(
                 && category.isNotBlank()
                 && date.isNotBlank()
 
+    //ADD THIS
+    val dateMillis: Long
+        @RequiresApi(Build.VERSION_CODES.O)
+        get() = parseDateWithCurrentTimeToMillis(date)
+
 }
+
 
 
 
 sealed interface AddTransactionEffect {
     object NavigateBack : AddTransactionEffect
-    object SaveTransaction : AddTransactionEffect
     object OpenDatePicker : AddTransactionEffect
+    data class NavigateToSuccess(val transactionId: Long) : AddTransactionEffect
+
 }

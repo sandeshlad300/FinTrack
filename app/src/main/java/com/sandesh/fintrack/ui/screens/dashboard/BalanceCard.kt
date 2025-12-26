@@ -25,9 +25,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sandesh.fintrack.R
+import com.sandesh.fintrack.ui.screens.transaction.addTransaction.formatAmount
 
 @Composable
-fun BalanceCard() {
+fun BalanceCard(
+    totalBalance: Double,
+    income: Double,
+    expense: Double
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,7 +55,7 @@ fun BalanceCard() {
             Spacer(Modifier.height(6.dp))
 
             Text(
-                text = "$12,345.67",
+                text = "₹"+formatAmount(totalBalance.toString()),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -75,7 +80,7 @@ fun BalanceCard() {
                         Text("Income", color = Color.White.copy(0.8f), fontSize = 12.sp)
                     }
                     Spacer(Modifier.height(6.dp))
-                    Text("$5,400.00", color = Color.White, fontSize = 18.sp)
+                    Text("₹"+formatAmount(income.toString()), color = Color.White, fontSize = 18.sp)
                 }
 
                 // EXPENSE
@@ -90,7 +95,7 @@ fun BalanceCard() {
                         Text("Expense", color = Color.White.copy(0.8f), fontSize = 12.sp)
                     }
                     Spacer(Modifier.height(6.dp))
-                    Text("$2,150.50", color = Color.White, fontSize = 18.sp)
+                    Text("₹"+formatAmount( expense.toString()), color = Color.White, fontSize = 18.sp)
                 }
             }
         }

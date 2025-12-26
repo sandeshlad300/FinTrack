@@ -1,5 +1,7 @@
 package com.sandesh.fintrack.ui.screens.dashboard
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,16 +15,40 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sandesh.fintrack.domain.TransactionRepository
+import com.sandesh.fintrack.ui.screens.dashboard.recentTransaction.RecentTransactionSection
+import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewModel
+import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewModelFactory
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DashboardScreen(
     modifier: Modifier = Modifier,
     name: String,
+    repository: TransactionRepository,
     onAddTransactionClick: () -> Unit
 ) {
+    val viewModel: TransactionsViewModel = viewModel(
+        factory = TransactionsViewModelFactory(repository)
+    )
+    val state by viewModel.state.collectAsState()
+
+    val recentTransactions = remember(
+        state.todayList,
+        state.yesterdayList
+    ) {
+        (state.todayList + state.yesterdayList)
+            .take(3)
+    }
+
+
     Scaffold { innerPadding ->
 
         Column(
@@ -38,10 +64,17 @@ fun DashboardScreen(
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 20.dp),
+                contentPadding = PaddingValues(bottom = innerPadding.calculateBottomPadding() + 24.dp),
                 verticalArrangement = Arrangement.spacedBy(26.dp)
             ) {
-                item { BalanceCard() }
+                item {
+                    BalanceCard(
+                        totalBalance = state.balance.total,
+                        income = state.balance.income,
+                        expense = state.balance.expense
+                    )
+
+                }
 
                 item {
                     QuickActionsSection(
@@ -49,8 +82,19 @@ fun DashboardScreen(
                     )
                 }
 
-                item { RecentTransactionSection() }
+                item {
+                    if (recentTransactions.isNotEmpty()) {
+                        RecentTransactionSection(
+                            transactions = recentTransactions
+                        )
+                    }
+                 }
+
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
             }
+
         }
     }
 }

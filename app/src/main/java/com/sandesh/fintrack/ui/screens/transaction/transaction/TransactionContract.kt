@@ -1,6 +1,8 @@
 package com.sandesh.fintrack.ui.screens.transaction.transaction
 
 import androidx.compose.ui.graphics.Color
+import com.sandesh.fintrack.ui.screens.transaction.addTransaction.BalanceUiState
+import com.sandesh.fintrack.ui.screens.transaction.transactionSuccess.TransactionUiModel
 
 // ----------------------------
 // DATA MODEL
@@ -10,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 data class TransactionItem(
     val title: String,
     val category: String,
-    val time: String,
+    val time: Long,
     val amount: String,
     val isExpense: Boolean,
     val iconBg: Color
@@ -23,9 +25,10 @@ data class TransactionItem(
 
 
 data class TransactionsState(
+    val balance: BalanceUiState = BalanceUiState(),
+    val todayList: List<TransactionUiModel> = emptyList(),
+    val yesterdayList: List<TransactionUiModel> = emptyList(),
     val selectedFilter: TransactionFilter = TransactionFilter.ALL,
-    val todayList: List<TransactionItem> = emptyList(),
-    val yesterdayList: List<TransactionItem> = emptyList(),
 )
 
 

@@ -1,53 +1,128 @@
 package com.sandesh.fintrack.ui.screens.transaction.transaction
 
-import androidx.compose.ui.graphics.Color
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.sandesh.fintrack.common.utils.isToday
+import com.sandesh.fintrack.common.utils.isYesterday
+import com.sandesh.fintrack.domain.TransactionModel
+import com.sandesh.fintrack.domain.TransactionRepository
+import com.sandesh.fintrack.mappper.toUi
+import com.sandesh.fintrack.ui.screens.transaction.addTransaction.BalanceUiState
+import com.sandesh.fintrack.ui.screens.transaction.transactionSuccess.TransactionUiModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class TransactionsViewModel : ViewModel() {
-
+@RequiresApi(Build.VERSION_CODES.O)
+class TransactionsViewModel(
+    private val repository: TransactionRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(TransactionsState())
     val state: StateFlow<TransactionsState> = _state
 
-
     private val _effect = Channel<TransactionsEffect>()
     val effect = _effect.receiveAsFlow()
 
-
     init {
-        load()
+        onEvent(TransactionsEvent.LoadTransactions)
     }
 
-
+    @RequiresApi(Build.VERSION_CODES.O)
     fun onEvent(event: TransactionsEvent) {
         when (event) {
             is TransactionsEvent.OnFilterChange -> {
-                _state.update { it.copy(selectedFilter = event.filter) }
+                _state.update {
+                    it.copy(selectedFilter = event.filter)
+                }
             }
-            TransactionsEvent.LoadTransactions -> load()
+            TransactionsEvent.LoadTransactions -> {
+                loadTransactions()
+            }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun loadTransactions() {
+        viewModelScope.launch {
+            repository.observeTransactions().collect { list ->
 
-    private fun load() {
-        val today = listOf(
-            TransactionItem("Starbucks Coffee", "Food & Drink", "10:30 AM", "-$5.75", true, Color(0xFFEB8F33)),
-            TransactionItem("Apple Store", "Electronics", "2:15 PM", "-$1,299.00", true, Color(0xFF8E44AD)),
-            TransactionItem("Freelance Project", "Income", "4:00 PM", "+$850.00", false, Color(0xFF2ECC71))
-        )
+                val balance = calculateBalance(list)
+                val filtered = applyFilter(list, state.value.selectedFilter)
+                val (today, yesterday) = splitByDate(filtered)
+
+                _state.update {
+                    it.copy(
+                        balance = balance,
+                        todayList = today,
+                        yesterdayList = yesterday
+                    )
+                }
+            }
+        }
+    }
+
+}
 
 
-        val yesterday = listOf(
-            TransactionItem("Metro Pass", "Transport", "8:45 AM", "-$35.00", true, Color(0xFF2980B9)),
-            TransactionItem("Netflix Subscription", "Entertainment", "9:00 AM", "-$15.99", true, Color(0xFFE84393))
-        )
 
+fun applyFilter(
+    list: List<TransactionModel>,
+    filter: TransactionFilter
+): List<TransactionModel> {
+    return when (filter) {
+        TransactionFilter.ALL -> list
 
-        _state.update { it.copy(todayList = today, yesterdayList = yesterday) }
+        TransactionFilter.INCOME ->
+            list.filter { it.isIncome }
+
+        TransactionFilter.EXPENSE ->
+            list.filter { !it.isIncome }
+
+        TransactionFilter.DATE ->
+            list.sortedByDescending { it.date }
     }
 }
+
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun splitByDate(
+    list: List<TransactionModel>
+): Pair<List<TransactionUiModel>, List<TransactionUiModel>> {
+
+    val today = mutableListOf<TransactionUiModel>()
+    val yesterday = mutableListOf<TransactionUiModel>()
+
+    list.forEach {
+        when {
+            isToday(it.date) -> today.add(it.toUi())
+            isYesterday(it.date) -> yesterday.add(it.toUi())
+        }
+    }
+    return today to yesterday
+}
+
+private fun calculateBalance(list: List<TransactionModel>): BalanceUiState {
+
+    val income = list
+        .filter { it.isIncome }
+        .sumOf { it.amount }
+
+    val expense = list
+        .filter { !it.isIncome }
+        .sumOf { it.amount }
+
+    return BalanceUiState(
+        total = income - expense,
+        income = income,
+        expense = expense
+    )
+}
+
+

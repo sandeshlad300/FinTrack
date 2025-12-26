@@ -3,6 +3,7 @@ package com.sandesh.fintrack.common.transaction
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,14 +31,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sandesh.fintrack.R
+import com.sandesh.fintrack.ui.screens.transaction.addTransaction.formatAmount
 import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionFilter
 import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionItem
+import com.sandesh.fintrack.ui.screens.transaction.transactionSuccess.TransactionUiModel
 
 @Composable
-fun FiltersRow(selected: TransactionFilter, onSelect: (TransactionFilter) -> Unit) {
+fun FiltersRow(
+    selected: TransactionFilter,
+    onSelect: (TransactionFilter) -> Unit)
+{
 
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -90,7 +99,7 @@ fun SectionTitle(text: String) {
 
 
 @Composable
-fun TransactionCard(item: TransactionItem) {
+fun TransactionCard(item: TransactionUiModel) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -99,27 +108,67 @@ fun TransactionCard(item: TransactionItem) {
             .background(Color(0xFF1E293B))
             .padding(16.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+
+            // 🔹 LEFT ICON
             Box(
                 modifier = Modifier
-                    .size(50.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(item.iconBg)
-            ) {}
-
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(
+                        if (item.source == "Income")
+                            Color(0xFF1E3A2F)
+                        else
+                            Color(0xFF3A1E1E)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.transaction),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    colorFilter = ColorFilter.tint(
+                        if (item.source == "Income")
+                            Color(0xFF2ECC71)
+                        else
+                            Color(0xFFFF6B6B)
+                    )
+                )
+            }
 
             Spacer(modifier = Modifier.width(12.dp))
 
+            // 🔹 TITLE + DATE
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = item.category,
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
 
-            Column(modifier = Modifier.weight(1f)) {
-                Text(item.title, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                Text("${item.category} • ${item.time}", color = Color.Gray, fontSize = 12.sp)
+                Text(
+                    text = formatDateTime(item.date),
+                    color = Color.Gray,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
             }
 
-
+            // 🔹 AMOUNT (RIGHT SIDE)
             Text(
-                item.amount,
-                color = if (item.isExpense) Color(0xFFFF6B6B) else Color(0xFF2ECC71),
+                text = formatAmount( "₹"+item.amount.toString()),
+                color = if (item.source == "Income")
+                    Color(0xFF2ECC71)
+                else
+                    Color(0xFFFF6B6B),
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -127,17 +176,6 @@ fun TransactionCard(item: TransactionItem) {
 }
 
 
-@Composable
-fun AddButton(onClick: () -> Unit) {
-    Box(
-        modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
-    ) {
-        FloatingActionButton(onClick = onClick) {
-            Icon(Icons.Default.Add, contentDescription = null)
-        }
-    }
-}
 
 
 @Composable
