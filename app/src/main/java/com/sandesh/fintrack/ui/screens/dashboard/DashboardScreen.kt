@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sandesh.fintrack.domain.TransactionRepository
-import com.sandesh.fintrack.ui.screens.auth.RegistrationViewModel
 import com.sandesh.fintrack.ui.screens.dashboard.recentTransaction.RecentTransactionSection
 import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewModel
 import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewModelFactory
