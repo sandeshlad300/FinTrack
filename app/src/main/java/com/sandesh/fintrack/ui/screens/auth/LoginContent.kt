@@ -140,7 +140,7 @@ fun LoginContent(
             imeAction = ImeAction.Done
         ),
         keyboardActions = KeyboardActions.Default,
-        interactionSource = remember { MutableInteractionSource() },
+        interactionSource = remember { MutableInteractionSource() }
     )
 
     Spacer(Modifier.height(14.dp))

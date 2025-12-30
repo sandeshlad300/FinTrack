@@ -22,6 +22,7 @@ import com.sandesh.fintrack.ui.screens.intro.IntroViewModelFactory
 import com.sandesh.fintrack.ui.screens.intro.introPages
 import com.sandesh.fintrack.ui.screens.splash.SplashScreen
 import com.sandesh.fintrack.ui.screens.splash.SplashViewModel
+import com.sandesh.fintrack.ui.screens.splash.SplashViewModelFactory
 import com.sandesh.fintrack.ui.screens.transaction.addTransaction.AddTransactionScreen
 import com.sandesh.fintrack.ui.screens.transaction.room.AppDatabase
 
@@ -43,7 +44,14 @@ fun AppNavGraph(
 
 
         composable(Screen.Splash.route) { backStackEntry ->
-            val splashViewModel: SplashViewModel = viewModel(backStackEntry)
+            val context = LocalContext.current
+            val firstLaunchStore = remember { FirstLaunchStore(context) }
+
+            val splashViewModel: SplashViewModel = viewModel(
+                backStackEntry,
+                factory = SplashViewModelFactory(firstLaunchStore)
+            )
+
             SplashScreen(
                 viewModel = splashViewModel,
                 onNavigate = {
@@ -51,6 +59,8 @@ fun AppNavGraph(
                 }
             )
         }
+
+
 
         composable(Screen.Intro.route) {
             val context = LocalContext.current

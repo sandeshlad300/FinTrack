@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
     id("kotlin-kapt")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -18,6 +19,7 @@ android {
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -42,6 +44,8 @@ android {
         compose = true
         buildConfig = true
     }
+
+
 }
 
 dependencies {
@@ -107,12 +111,14 @@ dependencies {
     // Flow testing
     testImplementation(libs.turbine)
 
-
-        // Required for ViewModel / LiveData / StateFlow unit tests
+    // Required for ViewModel / LiveData / StateFlow unit tests
     testImplementation(libs.androidx.core.testing)
 
+    // Analytics
+    implementation("com.google.firebase:firebase-analytics-ktx")
 
-
-
+    // Crashlytics
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
 
 }
+

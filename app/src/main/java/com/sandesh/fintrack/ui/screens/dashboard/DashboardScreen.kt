@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sandesh.fintrack.domain.TransactionRepository
+import com.sandesh.fintrack.domain.TransactionRepositoryImpl
 import com.sandesh.fintrack.ui.screens.dashboard.recentTransaction.RecentTransactionSection
 import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewModel
 import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewModelFactory
@@ -36,7 +37,15 @@ fun DashboardScreen(
     val viewModel: TransactionsViewModel = viewModel(
         factory = TransactionsViewModelFactory(repository)
     )
+    val dashboardViewModel: DashboardViewModel = viewModel(
+        factory = DashboardViewModelFactory(repository as TransactionRepositoryImpl)
+    )
+
     val state by viewModel.state.collectAsState()
+
+    val income by dashboardViewModel.income.collectAsState()
+    val expense by dashboardViewModel.expense.collectAsState()
+    val total by dashboardViewModel.totalBalance.collectAsState()
 
 
     val recentTransactions = remember(
@@ -68,9 +77,9 @@ fun DashboardScreen(
             ) {
                 item {
                     BalanceCard(
-                        totalBalance = state.balance.total,
-                        income = state.balance.income,
-                        expense = state.balance.expense
+                        totalBalance = total,//state.balance.total,
+                        income = income,//state.balance.income,
+                        expense = expense,//state.balance.expense
                     )
 
                 }
