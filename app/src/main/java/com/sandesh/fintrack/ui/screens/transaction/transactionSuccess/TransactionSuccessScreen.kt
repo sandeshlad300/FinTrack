@@ -4,9 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -42,16 +45,19 @@ fun TransactionSuccessScreen(
                     listOf(Color(0xFF140B2D), Color(0xFF090417))
                 )
             )
-            .padding(24.dp)
+            .windowInsetsPadding(WindowInsets.safeDrawing)
+            .padding(horizontal = 24.dp)
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
             Spacer(Modifier.height(60.dp))
             SuccessIcon()
             Spacer(Modifier.height(24.dp))
 
             Text(
-                "Transaction Added!",
+                text = "Transaction Added!",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -77,4 +83,3 @@ fun TransactionSuccessScreen(
         }
     }
 }
-

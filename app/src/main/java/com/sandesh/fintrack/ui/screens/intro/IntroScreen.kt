@@ -86,6 +86,7 @@ fun IntroScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(DarkNavy)
+            .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         // ---------- FULLSCREEN PAGER ----------
         HorizontalPager(
@@ -132,7 +133,7 @@ fun IntroScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 32.dp),
+                .padding(bottom = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             IntroPagerIndicator(pagerState, pages.size)

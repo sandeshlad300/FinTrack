@@ -28,7 +28,10 @@ fun TransactionSuccessRoute(
             navController.navigate(Screen.Dashboard.route)
         },
         onViewAllTransactions = {
-            navController.navigate(Screen.Transactions.route)
+          //  navController.navigate(Screen.Transactions.route)
+            navController.navigate(Screen.Dashboard.route + "?tab=1") {
+                popUpTo(Screen.Dashboard.route) { inclusive = true }
+            }
         }
     )
 }

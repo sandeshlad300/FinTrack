@@ -14,9 +14,9 @@ android {
     defaultConfig {
         applicationId = "com.sandesh.fintrack"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        targetSdk = 35
+        versionCode = 6
+        versionName = "1.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -119,6 +119,7 @@ dependencies {
 
     // Crashlytics
     implementation("com.google.firebase:firebase-crashlytics-ktx")
+
 
 }
 

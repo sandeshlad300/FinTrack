@@ -27,7 +27,6 @@ import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewM
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainDashboardScreen(
-    name: String,
     navController: NavHostController,
     onAddClick: () -> Unit
 ) {
@@ -60,7 +59,6 @@ fun MainDashboardScreen(
         when (selectedTab) {
             0 -> DashboardScreen(
                 modifier = Modifier.padding(padding),
-                name = name,
                 repository = repository,
                 onAddTransactionClick = {
                     navController.navigate(Screen.AddTransactions.route) // 🔥 navigation
