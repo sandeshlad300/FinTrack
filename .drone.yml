@@ -2,6 +2,11 @@ kind: pipeline
 type: docker
 name: android-ci
 
+trigger:
+  branch:
+    - main
+    - master
+
 steps:
   - name: build-debug
     image: ghcr.io/cirruslabs/android-sdk:34
