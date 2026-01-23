@@ -9,7 +9,7 @@ trigger:
 
 steps:
   - name: build-debug
-    image: ghcr.io/cirruslabs/android-sdk:34
+    image: ghcr.io/cirruslabs/android-sdk
     commands:
       - chmod +x gradlew
       - ./gradlew clean assembleDebug
