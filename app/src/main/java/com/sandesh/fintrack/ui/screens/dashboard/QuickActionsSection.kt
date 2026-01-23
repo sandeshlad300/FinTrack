@@ -14,27 +14,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sandesh.fintrack.R
+import com.sandesh.fintrack.common.dashboard.QuickAction
 
 @Composable
 fun QuickActionsSection(
-    onAddTransactionClick: () -> Unit
+    onAddTransactionClick: () -> Unit,
+    onActionClick: (QuickAction) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
 
@@ -56,7 +53,7 @@ fun QuickActionsSection(
                 title = "Add Transaction",
                 iconRes = R.drawable.add_transaction,
                 active = true,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).testTag("add_transaction_button"),
                 onClick = onAddTransactionClick
             )
 
@@ -64,7 +61,7 @@ fun QuickActionsSection(
                 title = "Analytics",
                 iconRes = R.drawable.analysis,
                 modifier = Modifier.weight(1f),
-                onClick = { }
+                onClick = { onActionClick(QuickAction.ANALYTICS) }
             )
         }
 
@@ -79,14 +76,14 @@ fun QuickActionsSection(
                 title = "AI Assistant",
                 iconRes = R.drawable.ai_assistant,
                 modifier = Modifier.weight(1f),
-                onClick = { }
+                onClick = { onActionClick(QuickAction.AI_ASSISTANT) }
             )
 
             ActionCard(
                 title = "Goals",
                 iconRes = R.drawable.goals,
                 modifier = Modifier.weight(1f),
-                onClick = { }
+                onClick = { onActionClick(QuickAction.GOALS) }
             )
         }
     }

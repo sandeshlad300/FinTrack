@@ -25,4 +25,11 @@ class TransactionRepositoryImpl(
                 list.map { it.toModel() }
             }
     }
+
+
+    fun totalIncome(): Flow<Double> = dao.getTotalIncome()
+
+    fun totalExpense(): Flow<Double> = dao.getTotalExpense()
+
+    fun totalBalance(): Flow<Double> = dao.getTotalBalance()
 }

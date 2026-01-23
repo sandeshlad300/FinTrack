@@ -1,4 +1,4 @@
-package com.sandesh.fintrack
+    package com.sandesh.fintrack
 
 import android.os.Build
 import android.os.Bundle
@@ -7,14 +7,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.navigation.compose.rememberNavController
+import com.sandesh.fintrack.core.data.AppPreferences
 import com.sandesh.fintrack.navigation.AppNavGraph
 import com.sandesh.fintrack.ui.theme.FinTrackTheme
 
+@RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+    private lateinit var appPreferences: AppPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        appPreferences = AppPreferences.getInstance(applicationContext)
+        //fintrack theme
         setContent {
             FinTrackTheme {
                     val navController = rememberNavController()

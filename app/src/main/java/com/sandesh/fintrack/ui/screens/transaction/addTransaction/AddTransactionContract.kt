@@ -2,7 +2,6 @@ package com.sandesh.fintrack.ui.screens.transaction.addTransaction
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.sandesh.fintrack.common.parseDateToMillis
 import com.sandesh.fintrack.common.transaction.parseDateWithCurrentTimeToMillis
 
 sealed interface AddTransactionIntent {

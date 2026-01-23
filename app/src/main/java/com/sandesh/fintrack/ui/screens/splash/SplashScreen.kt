@@ -27,10 +27,8 @@ fun SplashScreen(
     viewModel: SplashViewModel,
     onNavigate: () -> Unit
 ) {
-    // animation trigger
     var visible by remember { mutableStateOf(false) }
 
-    // Start animation immediately
     LaunchedEffect(Unit) {
         visible = true
         viewModel.onEvent(SplashEvent.Start)
@@ -43,23 +41,24 @@ fun SplashScreen(
 
     val gradient = Brush.verticalGradient(
         listOf(
-            Color(0xFF7B2FFF),  // Purple top
-            Color(0xFF2D6CDF),  // Blue mid
-            Color(0xFF05C7A5)   // Teal bottom
+            Color(0xFF7B2FFF),
+            Color(0xFF2D6CDF),
+            Color(0xFF05C7A5)
         )
     )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(gradient),
-        contentAlignment = Alignment.Center
+            .background(gradient)
+            .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
 
         AnimatedVisibility(
             visible = visible,
             enter = fadeIn() + slideInVertically(initialOffsetY = { 40 }),
-            exit = fadeOut() + slideOutVertically(targetOffsetY = { -40 })
+            exit = fadeOut() + slideOutVertically(targetOffsetY = { -40 }),
+            modifier = Modifier.align(Alignment.Center)
         ) {
 
             Column(
@@ -67,7 +66,6 @@ fun SplashScreen(
                 verticalArrangement = Arrangement.Center
             ) {
 
-                // Logo Box
                 Box(
                     modifier = Modifier
                         .size(90.dp)
@@ -84,9 +82,8 @@ fun SplashScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(Modifier.height(20.dp))
 
-                // Title
                 Text(
                     text = "FinTrack",
                     fontSize = 42.sp,
@@ -94,26 +91,22 @@ fun SplashScreen(
                     color = Color.White
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-                // Subtitle
                 Text(
                     text = "Track. Save. Grow.",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color.White.copy(alpha = 0.9f)
                 )
-
-
-
             }
         }
 
+        // Footer is now ALWAYS visible
         AppVersionFooter(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 24.dp)
+                .padding(bottom = 16.dp) // visual spacing only
         )
-
     }
 }

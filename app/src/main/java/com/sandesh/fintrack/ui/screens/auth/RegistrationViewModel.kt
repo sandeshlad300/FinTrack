@@ -1,6 +1,8 @@
 package com.sandesh.fintrack.ui.screens.auth
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -11,9 +13,16 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.firestore.FirebaseFirestore
+import com.sandesh.fintrack.core.data.AppPreferences
 
 
-class RegistrationViewModel : ViewModel() {
+class RegistrationViewModel(
+    application: Application
+) : AndroidViewModel(application) {
+
+    private val appPreferences =
+        AppPreferences.getInstance(application)
+
 
     private val _state = MutableStateFlow(AuthState())
     val state: StateFlow<AuthState> = _state
@@ -90,7 +99,8 @@ class RegistrationViewModel : ViewModel() {
                     passwordVisible = false,
                     createPasswordVisible = false,
                     confirmPasswordVisible = false,
-                    errorMessage = null
+                    errorMessage = null,
+                    loading = false
                 )
             }
             is AuthEvent.NameChanged -> {
@@ -153,7 +163,7 @@ class RegistrationViewModel : ViewModel() {
                     .await()
 
                 val name = snapshot.getString("name") ?: ""
-
+                appPreferences.setUserName(name)
                 updateState { it.copy(loading = false, success = true, name = name) }
 
                 _effect.send(AuthEffect.ShowSuccess("Login Successful"))

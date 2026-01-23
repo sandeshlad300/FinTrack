@@ -1,8 +1,9 @@
 package com.sandesh.fintrack.ui.screens.dashboard
 
-import android.R.attr.padding
-import android.annotation.SuppressLint
+
 import android.os.Build
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -28,12 +29,12 @@ import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewM
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainDashboardScreen(
-    name: String,
     navController: NavHostController,
+    initialTab: Int = 0,
     onAddClick: () -> Unit
 ) {
 
-    var selectedTab by remember { mutableStateOf(0) }
+    var selectedTab by remember { mutableStateOf(initialTab) }
     val context = LocalContext.current
 
     val database = remember {
@@ -48,6 +49,24 @@ fun MainDashboardScreen(
         factory = TransactionsViewModelFactory(repository)
     )
 
+    var lastBackPressTime by remember { mutableStateOf(0L) }
+
+    BackHandler {
+        if (selectedTab != 0) {
+            selectedTab = 0
+            return@BackHandler
+        }
+
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastBackPressTime < 2000) {
+            (context as? android.app.Activity)?.finish()
+        } else {
+            lastBackPressTime = currentTime
+            Toast.makeText(context, "Press back again to exit", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
     Scaffold(
         bottomBar = {
             BottomNavBar(
@@ -61,7 +80,6 @@ fun MainDashboardScreen(
         when (selectedTab) {
             0 -> DashboardScreen(
                 modifier = Modifier.padding(padding),
-                name = name,
                 repository = repository,
                 onAddTransactionClick = {
                     navController.navigate(Screen.AddTransactions.route) // 🔥 navigation

@@ -11,7 +11,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sandesh.fintrack.common.transaction.TransactionCard
-import com.sandesh.fintrack.domain.TransactionModel
 import com.sandesh.fintrack.ui.screens.transaction.transactionSuccess.TransactionUiModel
 
 @Composable

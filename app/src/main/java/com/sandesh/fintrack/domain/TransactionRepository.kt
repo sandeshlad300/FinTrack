@@ -7,5 +7,7 @@ interface TransactionRepository {
     suspend fun insert(transaction: TransactionModel): Long
     suspend fun getTransactionById(id: Long): TransactionModel
     fun observeTransactions(): Flow<List<TransactionModel>>
+
+
 }
 

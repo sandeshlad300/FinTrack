@@ -1,17 +1,16 @@
 package com.sandesh.fintrack.ui.screens.transaction.transactionSuccess
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Icon
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -22,25 +21,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.sandesh.fintrack.common.GradientButton
 import com.sandesh.fintrack.common.transaction.SuccessIcon
-import com.sandesh.fintrack.common.transaction.TransactionCard
 import com.sandesh.fintrack.common.transaction.TransactionSummaryCard
-
+import com.sandesh.fintrack.navigation.Screen
 
 
 @Composable
 fun TransactionSuccessScreen(
+    navController: NavController,
     viewModel: TransactionSuccessViewModel,
     onAddAnotherTransaction: () -> Unit,
     onViewAllTransactions: () -> Unit
 ) {
     val transactionUi by viewModel.transactionUi.collectAsState()
     if (transactionUi == null) return
+
+    BackHandler {
+        navController.navigate(Screen.Dashboard.route) {
+            popUpTo(Screen.Dashboard.route) { inclusive = false }
+            launchSingleTop = true
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -50,16 +55,19 @@ fun TransactionSuccessScreen(
                     listOf(Color(0xFF140B2D), Color(0xFF090417))
                 )
             )
-            .padding(24.dp)
+            .windowInsetsPadding(WindowInsets.safeDrawing)
+            .padding(horizontal = 24.dp)
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
             Spacer(Modifier.height(60.dp))
             SuccessIcon()
             Spacer(Modifier.height(24.dp))
 
             Text(
-                "Transaction Added!",
+                text = "Transaction Added!",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -85,4 +93,3 @@ fun TransactionSuccessScreen(
         }
     }
 }
-

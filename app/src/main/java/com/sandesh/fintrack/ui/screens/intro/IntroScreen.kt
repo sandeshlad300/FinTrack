@@ -16,7 +16,6 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -87,6 +86,7 @@ fun IntroScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(DarkNavy)
+            .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         // ---------- FULLSCREEN PAGER ----------
         HorizontalPager(
@@ -133,7 +133,7 @@ fun IntroScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 32.dp),
+                .padding(bottom = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             IntroPagerIndicator(pagerState, pages.size)

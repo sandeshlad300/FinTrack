@@ -19,10 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,7 +35,6 @@ import androidx.compose.ui.unit.sp
 import com.sandesh.fintrack.R
 import com.sandesh.fintrack.ui.screens.transaction.addTransaction.formatAmount
 import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionFilter
-import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionItem
 import com.sandesh.fintrack.ui.screens.transaction.transactionSuccess.TransactionUiModel
 
 @Composable

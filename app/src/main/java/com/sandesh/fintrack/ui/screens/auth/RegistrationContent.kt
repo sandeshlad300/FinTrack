@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -20,6 +19,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,6 +47,9 @@ fun RegistrationContent(
     onRegisterClick: () -> Unit,
     loading: Boolean,
 ) {
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+
 
     // ------------------------ NAME ------------------------
     Row(
@@ -205,6 +208,7 @@ fun RegistrationContent(
         text = "Register",
         loading = loading,
         onClick = {
+            keyboardController?.hide()
             onRegisterClick()
         },
         modifier = Modifier

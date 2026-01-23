@@ -11,7 +11,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.sandesh.fintrack.core.data.FirstLaunchStore
+import com.sandesh.fintrack.core.data.AppPreferences
 import com.sandesh.fintrack.domain.TransactionRepositoryImpl
 import com.sandesh.fintrack.ui.screens.auth.RegistrationScreen
 import com.sandesh.fintrack.ui.screens.auth.RegistrationViewModel
@@ -33,6 +33,12 @@ fun AppNavGraph(
 ) {
 
     val context = LocalContext.current
+
+
+    // ✅ SINGLE INSTANCE
+    val appPrefs = remember {
+        AppPreferences.getInstance(context)
+    }
     val database = remember { AppDatabase.getInstance(context) }
     val repository = remember { TransactionRepositoryImpl(database.transactionDao()) }
 
@@ -43,7 +49,10 @@ fun AppNavGraph(
 
 
         composable(Screen.Splash.route) { backStackEntry ->
+
             val splashViewModel: SplashViewModel = viewModel(backStackEntry)
+
+
             SplashScreen(
                 viewModel = splashViewModel,
                 onNavigate = {
@@ -52,14 +61,13 @@ fun AppNavGraph(
             )
         }
 
+
+
         composable(Screen.Intro.route) {
-            val context = LocalContext.current
-            val firstLaunchStore = remember { FirstLaunchStore(context) }
+
             val viewModel: IntroViewModel = viewModel(
                 factory = IntroViewModelFactory(
-                    markFinished = {
-                        firstLaunchStore.setOnboardingShown(true)
-                    },
+                    appPrefs = appPrefs,
                     totalPages = 3
                 )
             )
@@ -93,21 +101,28 @@ fun AppNavGraph(
         composable(
             route = Screen.Dashboard.route,
             arguments = listOf(
-                navArgument("name") { type = NavType.StringType }
+                navArgument("name") {
+                    type = NavType.StringType
+                },
+                navArgument("tab") {
+                    type = NavType.IntType
+                    defaultValue = 0
+                }
             )
-        ) { entry ->
+        ) { backStackEntry ->
 
-            val name = entry.arguments?.getString("name") ?: "User"
+            val tab = backStackEntry.arguments?.getInt("tab") ?: 0
 
-            //PASS navController
             MainDashboardScreen(
-                name = name,
                 navController = navController,
+                initialTab = tab,
                 onAddClick = {
                     navController.navigate(Screen.AddTransactions.route)
                 }
             )
         }
+
+
 
 
         // ADD TRANSACTION DESTINATION

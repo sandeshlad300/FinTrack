@@ -1,6 +1,7 @@
 package com.sandesh.fintrack.ui.screens.transaction.addTransaction
 
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -71,6 +72,13 @@ fun AddTransactionScreen(
 
     val state by viewModel.state.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }
+
+    BackHandler {
+        navController.navigate(Screen.Dashboard.route) {
+            popUpTo(Screen.Dashboard.route) { inclusive = false }
+            launchSingleTop = true
+        }
+    }
 
 
     val sheetState = rememberModalBottomSheetState(
@@ -156,7 +164,7 @@ fun AddTransactionScreen(
                     navigationIcon = {
                         IconButton(
                             onClick = {
-                                viewModel.onIntent(AddTransactionIntent.BackClicked)
+                                navController.navigate(Screen.Dashboard.route)
                             }
                         ) {
                             Icon(
