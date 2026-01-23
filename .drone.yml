@@ -1,9 +1,10 @@
 kind: pipeline
 type: docker
-name: test
+name: android-ci
 
 steps:
-  - name: hello
-    image: alpine
+  - name: build-debug
+    image: ghcr.io/cirruslabs/android-sdk:34
     commands:
-      - echo "Hello Drone"
+      - chmod +x gradlew
+      - ./gradlew clean assembleDebug
