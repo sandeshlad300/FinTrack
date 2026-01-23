@@ -1,5 +1,6 @@
 package com.sandesh.fintrack.ui.screens.transaction.transactionSuccess
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,20 +23,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.sandesh.fintrack.common.GradientButton
 import com.sandesh.fintrack.common.transaction.SuccessIcon
 import com.sandesh.fintrack.common.transaction.TransactionSummaryCard
-
+import com.sandesh.fintrack.navigation.Screen
 
 
 @Composable
 fun TransactionSuccessScreen(
+    navController: NavController,
     viewModel: TransactionSuccessViewModel,
     onAddAnotherTransaction: () -> Unit,
     onViewAllTransactions: () -> Unit
 ) {
     val transactionUi by viewModel.transactionUi.collectAsState()
     if (transactionUi == null) return
+
+    BackHandler {
+        navController.navigate(Screen.Dashboard.route) {
+            popUpTo(Screen.Dashboard.route) { inclusive = false }
+            launchSingleTop = true
+        }
+    }
 
     Box(
         modifier = Modifier

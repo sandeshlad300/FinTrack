@@ -99,7 +99,8 @@ class RegistrationViewModel(
                     passwordVisible = false,
                     createPasswordVisible = false,
                     confirmPasswordVisible = false,
-                    errorMessage = null
+                    errorMessage = null,
+                    loading = false
                 )
             }
             is AuthEvent.NameChanged -> {

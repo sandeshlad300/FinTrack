@@ -14,16 +14,24 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sandesh.fintrack.common.dashboard.QuickAction
+import com.sandesh.fintrack.common.dashboard.UnderConstructionContent
 import com.sandesh.fintrack.core.data.AppPreferences
 import com.sandesh.fintrack.domain.TransactionRepository
 import com.sandesh.fintrack.domain.TransactionRepositoryImpl
@@ -31,6 +39,7 @@ import com.sandesh.fintrack.ui.screens.dashboard.recentTransaction.RecentTransac
 import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewModel
 import com.sandesh.fintrack.ui.screens.transaction.transaction.TransactionsViewModelFactory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DashboardScreen(
@@ -53,6 +62,14 @@ fun DashboardScreen(
         factory = DashboardViewModelFactory(repository as TransactionRepositoryImpl)
     )
 
+    var showUnderConstructionSheet by remember { mutableStateOf(false) }
+    var selectedAction by remember { mutableStateOf<QuickAction?>(null) }
+
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+
+
     val state by viewModel.state.collectAsState()
 
     val income by dashboardViewModel.income.collectAsState()
@@ -67,6 +84,27 @@ fun DashboardScreen(
         (state.todayList + state.yesterdayList)
             .take(3)
     }
+
+    if (showUnderConstructionSheet) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showUnderConstructionSheet = false
+            },
+            sheetState = sheetState,
+            containerColor = Color(0xFF16142B),
+            shape = RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp)
+        ) {
+            UnderConstructionContent(
+                title = when (selectedAction) {
+                    QuickAction.ANALYTICS -> "Analytics"
+                    QuickAction.AI_ASSISTANT -> "AI Assistant"
+                    QuickAction.GOALS -> "Goals"
+                    else -> ""
+                }
+            )
+        }
+    }
+
 
 
     Scaffold { innerPadding ->
@@ -98,7 +136,11 @@ fun DashboardScreen(
 
                 item {
                     QuickActionsSection(
-                        onAddTransactionClick = onAddTransactionClick
+                        onAddTransactionClick = onAddTransactionClick,
+                        onActionClick = { action ->
+                            selectedAction = action
+                            showUnderConstructionSheet = true
+                        }
                     )
                 }
 

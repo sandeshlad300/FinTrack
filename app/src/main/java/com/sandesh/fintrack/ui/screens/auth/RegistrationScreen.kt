@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -116,7 +115,11 @@ fun RegistrationScreen(
                 AnimatedTabRow(
                     tabs = listOf("Log In", "Register"),
                     selectedTab = selectedTab,
-                    onTabSelected = { selectedTab = it }
+                    onTabSelected = {
+                        selectedTab = it
+                        viewModel.onEvent(AuthEvent.ClearAllFields)
+                        viewModel.onEvent(AuthEvent.SubmitRegistration)
+                    }
                 )
 
                 Spacer(Modifier.height(24.dp))

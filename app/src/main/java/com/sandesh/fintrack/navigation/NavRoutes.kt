@@ -4,9 +4,21 @@ package com.sandesh.fintrack.navigation
 sealed class Screen(val route: String) {
 
     object Splash : Screen("splash")
-    object Dashboard : Screen("dashboard/{name}") {
+   /* object Dashboard : Screen("dashboard/{name}") {
         fun passName(name: String): String = "dashboard/$name"
+    }*/
+
+    object Dashboard : Screen("dashboard/{name}?tab={tab}") {
+
+        fun passName(name: String): String {
+            return "dashboard/$name?tab=0"
+        }
+
+        fun withTab(name: String, tab: Int): String {
+            return "dashboard/$name?tab=$tab"
+        }
     }
+
     object Intro : Screen("intro")
     object Registration : Screen("registration")
     object Transactions : Screen("transactions")

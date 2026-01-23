@@ -120,6 +120,36 @@ dependencies {
     // Crashlytics
     implementation("com.google.firebase:firebase-crashlytics-ktx")
 
+    // Espresso core
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // Compose UI testing
+    androidTestImplementation(
+        "androidx.compose.ui:ui-test-junit4"
+    )
+
+    debugImplementation(
+        "androidx.compose.ui:ui-test-manifest"
+    )
+
+    // AndroidX test
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+
+    // Espresso core
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // Compose UI testing
+    androidTestImplementation(
+        "androidx.compose.ui:ui-test-junit4"
+    )
+
+    debugImplementation(
+        "androidx.compose.ui:ui-test-manifest"
+    )
+
+    // AndroidX test
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+
 
 }
 

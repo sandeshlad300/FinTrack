@@ -98,16 +98,31 @@ fun AppNavGraph(
         }
 
 
-        composable(route = Screen.Dashboard.route,) {
+        composable(
+            route = Screen.Dashboard.route,
+            arguments = listOf(
+                navArgument("name") {
+                    type = NavType.StringType
+                },
+                navArgument("tab") {
+                    type = NavType.IntType
+                    defaultValue = 0
+                }
+            )
+        ) { backStackEntry ->
 
-            //PASS navController
+            val tab = backStackEntry.arguments?.getInt("tab") ?: 0
+
             MainDashboardScreen(
                 navController = navController,
+                initialTab = tab,
                 onAddClick = {
                     navController.navigate(Screen.AddTransactions.route)
                 }
             )
         }
+
+
 
 
         // ADD TRANSACTION DESTINATION
