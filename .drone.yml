@@ -4,9 +4,7 @@ name: android-ci
 
 steps:
   - name: build-android
-    image: mobiledevops/android-sdk-image:34
-    environment:
-      GRADLE_USER_HOME: /drone/src/.gradle
+    image: ghcr.io/cirruslabs/android-sdk:latest
     commands:
       - chmod +x ./gradlew
       - ./gradlew assembleDebug
