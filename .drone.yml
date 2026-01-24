@@ -4,7 +4,9 @@ name: android-ci
 
 steps:
   - name: build-android
-    image: gradle:8.1.1-jdk17
+    image: mobiledevops/android-sdk-image:34
+    environment:
+      ANDROID_HOME: /opt/android-sdk-linux
     commands:
       - chmod +x ./gradlew
       - ./gradlew assembleDebug
