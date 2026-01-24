@@ -7,15 +7,16 @@ steps:
     image: ghcr.io/cirruslabs/android-sdk:34
     environment:
       ANDROID_HOME: /opt/android-sdk-linux
+      ANDROID_SDK_ROOT: /opt/android-sdk-linux
     commands:
       - chmod +x ./gradlew
       - ./gradlew assembleDebug
-      - - mkdir -p artifacts
+      - mkdir -p artifacts
       - cp app/build/outputs/apk/debug/*.apk artifacts/
 
-      - name: upload-apk
-      - image: plugins/archive
-      - settings:
-      - format: zip
-      - paths:
-          - artifacts/*
+  - name: upload-apk
+    image: plugins/archive
+    settings:
+      format: zip
+      paths:
+        - artifacts/*
