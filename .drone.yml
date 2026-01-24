@@ -10,3 +10,12 @@ steps:
     commands:
       - chmod +x ./gradlew
       - ./gradlew assembleDebug
+      - - mkdir -p artifacts
+      - cp app/build/outputs/apk/debug/*.apk artifacts/
+
+      - name: upload-apk
+      - image: plugins/archive
+      - settings:
+      - format: zip
+      - paths:
+      - artifacts/*
