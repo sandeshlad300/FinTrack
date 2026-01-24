@@ -6,4 +6,5 @@ steps:
   - name: build
     image: gradle:7.6-jdk17
     commands:
+      - chmod +x ./gradlew
       - ./gradlew assembleDebug
