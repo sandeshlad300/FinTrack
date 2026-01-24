@@ -4,18 +4,9 @@ name: android-ci
 
 steps:
   - name: build-android
-    image: mobiledevops/android-sdk-image:latest
+    image: ghcr.io/cirruslabs/android-sdk:34
     environment:
       ANDROID_HOME: /opt/android-sdk-linux
     commands:
       - chmod +x ./gradlew
       - ./gradlew assembleDebug
-
-  - name: upload-apk
-    image: plugins/archive
-    settings:
-      action: upload
-      format: tar.gz
-      name: apk-build
-      files:
-        - app/build/outputs/apk/debug/*.apk
