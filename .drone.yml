@@ -2,14 +2,8 @@ kind: pipeline
 type: docker
 name: android-ci
 
-trigger:
-  branch:
-    - main
-    - master
-
 steps:
-  - name: build-debug
-    image: ghcr.io/cirruslabs/android-sdk
+  - name: build
+    image: gradle:7.6-jdk17
     commands:
-      - chmod +x gradlew
-      - ./gradlew clean assembleDebug
+      - ./gradlew assembleDebug
