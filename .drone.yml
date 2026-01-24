@@ -3,8 +3,10 @@ type: docker
 name: android-ci
 
 steps:
-  - name: build
-    image: gradle:7.6-jdk17
+  - name: build-android
+    image: mobiledevops/android-sdk-image:34
+    environment:
+      GRADLE_USER_HOME: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
       - ./gradlew assembleDebug
