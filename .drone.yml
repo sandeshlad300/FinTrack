@@ -13,11 +13,8 @@ steps:
     image: alpine
     commands:
       - mkdir -p artifacts
-      - cp app/build/outputs/apk/debug/app-debug.apk artifacts/
+      - cp app/build/outputs/apk/debug/*.apk artifacts/
+
     when:
       status:
         - success
-
-artifacts:
-  paths:
-    - artifacts/*.apk
