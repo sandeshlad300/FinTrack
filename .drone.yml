@@ -4,17 +4,13 @@ name: android-ci
 
 steps:
   - name: build-android
-    image: ghcr.io/cirruslabs/android-sdk:34
+    image: gradle:8.1.1-jdk17
     commands:
       - chmod +x ./gradlew
       - ./gradlew assembleDebug
 
   - name: upload-apk
-    image: alpine
-    commands:
-      - mkdir -p artifacts
-      - cp app/build/outputs/apk/debug/*.apk artifacts/
-
-    when:
-      status:
-        - success
+    image: plugins/artifacts
+    settings:
+      path:
+        - app/build/outputs/apk/debug/*.apk
