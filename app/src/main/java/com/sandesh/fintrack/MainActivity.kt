@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         appPreferences = AppPreferences.getInstance(applicationContext)
-        //fintrack theme
+        //fintrack theme add Drone CI Pipeline
         setContent {
             FinTrackTheme {
                     val navController = rememberNavController()
