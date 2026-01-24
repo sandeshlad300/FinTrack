@@ -15,7 +15,7 @@ steps:
     image: plugins/archive
     settings:
       action: upload
-      format: zip
+      format: tar.gz
       name: apk-build
       files:
         - app/build/outputs/apk/debug/*.apk
