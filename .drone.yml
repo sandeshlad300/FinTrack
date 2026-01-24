@@ -12,7 +12,9 @@ steps:
       - ./gradlew assembleDebug
 
   - name: upload-apk
-    image: plugins/artifacts
+    image: plugins/archive
     settings:
-      path:
+      format: zip
+      name: apk-build
+      files:
         - app/build/outputs/apk/debug/*.apk
