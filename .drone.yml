@@ -3,13 +3,11 @@ type: docker
 name: android-ci
 
 steps:
-
   - name: build-android
     image: ghcr.io/cirruslabs/android-sdk:34
     environment:
       ANDROID_HOME: /opt/android-sdk-linux
-      ANDROID_SDK_ROOT: /opt/android-sdk-linux
-      GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
     commands:
       - chmod +x ./gradlew
       - ./gradlew assembleDebug --no-daemon
@@ -23,4 +21,7 @@ steps:
       - npm install -g firebase-tools
       - echo "$FIREBASE_SERVICE_ACCOUNT" > /tmp/firebase-key.json
       - export GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase-key.json
-      - firebase appdistribution:distribute app/build/outputs/apk/debug/app-debug.apk --app 1:570538572956:android:1b987f0824488399760159 --groups testers --release-notes "Drone CI build"
+      - firebase appdistribution:distribute app/build/outputs/apk/debug/app-debug.apk \
+        --app 1:570538572956:android:1b987f0824488399760159 \
+        --groups testers \
+        --release-notes "Drone CI build"
