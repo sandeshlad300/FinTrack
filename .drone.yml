@@ -25,6 +25,6 @@ steps:
         from_secret: FIREBASE_SERVICE_ACCOUNT_B64
     commands:
       - npm install -g firebase-tools
-      - echo "$FIREBASE_SERVICE_ACCOUNT_B64" | base64 -d > /tmp/firebase-key.json
+      - printf '%s' "$FIREBASE_SERVICE_ACCOUNT_B64" | base64 -d > /tmp/firebase-key.json
       - export GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase-key.json
       - firebase appdistribution:distribute app/build/outputs/apk/debug/app-debug.apk --app 1:570538572956:android:1b987f0824488399760159 --groups testers --release-notes "Drone CI build #${DRONE_BUILD_NUMBER}"
