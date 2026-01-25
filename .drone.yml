@@ -26,8 +26,8 @@ steps:
     commands:
       - npm install -g firebase-tools
 
-      # write service account key
-      - echo "$FIREBASE_SERVICE_ACCOUNT" > /tmp/firebase-key.json
+      # write service account JSON safely
+      - printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > /tmp/firebase-key.json
       - export GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase-key.json
 
       # distribute APK
