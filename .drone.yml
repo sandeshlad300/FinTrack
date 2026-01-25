@@ -7,7 +7,6 @@ steps:
     image: ghcr.io/cirruslabs/android-sdk:34
     environment:
       ANDROID_HOME: /opt/android-sdk-linux
-      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
     commands:
       - chmod +x ./gradlew
       - ./gradlew assembleDebug --no-daemon
@@ -21,7 +20,10 @@ steps:
       - npm install -g firebase-tools
       - echo "$FIREBASE_SERVICE_ACCOUNT" > /tmp/firebase-key.json
       - export GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase-key.json
-      - firebase appdistribution:distribute app/build/outputs/apk/debug/app-debug.apk \
+      - |
+        firebase appdistribution:distribute \
+        app/build/outputs/apk/debug/app-debug.apk \
         --app 1:570538572956:android:1b987f0824488399760159 \
         --groups testers \
-        --release-notes "Drone CI build"
+        --release-notes "Drone CI build" \
+        --service-account /tmp/firebase-key.json
