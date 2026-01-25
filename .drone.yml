@@ -3,20 +3,14 @@ type: docker
 name: android-ci
 
 steps:
-  # ----------------------------
-  # Build Android APK
-  # ----------------------------
   - name: build-android
-    image: gradle:8.5-jdk17
+    image: gradle:8.13-jdk17
     environment:
       ANDROID_HOME: /opt/android-sdk-linux
       ANDROID_SDK_ROOT: /opt/android-sdk-linux
     commands:
       - gradle assembleDebug --no-daemon
 
-  # ----------------------------
-  # Upload APK to Firebase App Distribution
-  # ----------------------------
   - name: firebase-app-distribution
     image: node:20
     environment:
