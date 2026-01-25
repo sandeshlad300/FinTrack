@@ -11,6 +11,8 @@ steps:
     commands:
       - chmod +x ./gradlew
       - ./gradlew assembleDebug
+      - ./gradlew assembleDebug --no-daemon --stacktrace
+
 
   - name: firebase-distribute
     image: node:20
