@@ -21,16 +21,12 @@ steps:
   - name: firebase-app-distribution
     image: node:20
     environment:
-      FIREBASE_SERVICE_ACCOUNT:
-        from_secret: FIREBASE_SERVICE_ACCOUNT
+      FIREBASE_SERVICE_ACCOUNT_B64:
+        from_secret: FIREBASE_SERVICE_ACCOUNT_B64
     commands:
       - npm install -g firebase-tools
-
-      # write service account JSON safely
-      - printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > /tmp/firebase-key.json
+      - echo "$FIREBASE_SERVICE_ACCOUNT_B64" | base64 -d > /tmp/firebase-key.json
       - export GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase-key.json
-
-      # distribute APK
       - firebase appdistribution:distribute app/build/outputs/apk/debug/app-debug.apk \
         --app 1:570538572956:android:1b987f0824488399760159 \
         --groups testers \
