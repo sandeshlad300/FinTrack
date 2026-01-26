@@ -1,3 +1,13 @@
+# ------------------------
+# Shared Gradle Cache Volume
+# ------------------------
+volumes:
+  - name: gradle-cache
+    temp: {}
+
+# =========================================================
+# PR PIPELINE — Quality Gate Only
+# =========================================================
 kind: pipeline
 type: docker
 name: android-pr-check
@@ -12,31 +22,29 @@ steps:
     environment:
       ANDROID_HOME: /opt/android-sdk-linux
       GRADLE_USER_HOME: /drone/src/.gradle
+    volumes:
+      - name: gradle-cache
+        path: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
-      - ./gradlew testDebugUnitTest
-      - ./gradlew lintDebug
+      - ./gradlew testDebugUnitTest lintDebug --no-daemon
 
+
+# =========================================================
+# MAIN PIPELINE — Build + Distribute
+# =========================================================
 ---
-
 kind: pipeline
 type: docker
 name: android-ci
 
-steps:
-  # ------------------------
-  # 0. Quality Gate (Tests + Lint)
-  # ------------------------
-  - name: test-and-lint
-    image: ghcr.io/cirruslabs/android-sdk:34
-    environment:
-      ANDROID_HOME: /opt/android-sdk-linux
-      GRADLE_USER_HOME: /drone/src/.gradle
-    commands:
-      - chmod +x ./gradlew
-      - ./gradlew testDebugUnitTest
-      - ./gradlew lintDebug
+trigger:
+  branch:
+    - main
+  event:
+    - push
 
+steps:
   # ------------------------
   # 1. Build Android APK
   # ------------------------
@@ -45,6 +53,9 @@ steps:
     environment:
       ANDROID_HOME: /opt/android-sdk-linux
       GRADLE_USER_HOME: /drone/src/.gradle
+    volumes:
+      - name: gradle-cache
+        path: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
       - ./gradlew assembleDebug --no-daemon
@@ -61,4 +72,7 @@ steps:
       - npm install -g firebase-tools
       - printf '%s' "$FIREBASE_SERVICE_ACCOUNT_B64" | base64 -d > /tmp/firebase-key.json
       - export GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase-key.json
-      - firebase appdistribution:distribute app/build/outputs/apk/debug/app-debug.apk --app 1:570538572956:android:1b987f0824488399760159 --groups testers --release-notes 'Drone CI build'
+      - firebase appdistribution:distribute app/build/outputs/apk/debug/app-debug.apk \
+        --app 1:570538572956:android:1b987f0824488399760159 \
+        --groups testers \
+        --release-notes 'Drone CI build'
