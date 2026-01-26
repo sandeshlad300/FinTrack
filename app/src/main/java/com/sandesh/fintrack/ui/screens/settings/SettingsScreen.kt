@@ -48,7 +48,7 @@ fun SettingsScreen() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "After CI/CD pipeline done we will start work on feature",
+                text = "After CI/CD pipeline done we will start work on feature.",
                 fontSize = 14.sp,
                 color = Color.White,
                 textAlign = TextAlign.Center
