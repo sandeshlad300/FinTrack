@@ -8,6 +8,6 @@ class SampleTest {
     @Test
     fun addition_isCorrect() {
         val result = 2 + 2
-        assertThat(result).isEqualTo(6)
+        assertThat(result).isEqualTo(4)
     }
 }
