@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         appPreferences = AppPreferences.getInstance(applicationContext)
-        //fintrack theme
+        // test feature branch for PR testing
         setContent {
             FinTrackTheme {
                     val navController = rememberNavController()
