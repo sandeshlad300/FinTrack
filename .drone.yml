@@ -5,18 +5,91 @@ volumes:
   - name: gradle-cache
     temp: {}
 
-# =========================================================
-# PR PIPELINE — Quality Gate Only
-# =========================================================
+# =====================================
+# FEATURE BRANCH CI (FAST)
+# =====================================
 kind: pipeline
 type: docker
-name: android-pr-check
+name: feature-ci
 
 trigger:
+  branch:
+    - feature/*
   event:
+    - push
     - pull_request
 
 steps:
+  - name: unit-tests
+    image: ghcr.io/cirruslabs/android-sdk:34
+    environment:
+      ANDROID_HOME: /opt/android-sdk-linux
+      GRADLE_USER_HOME: /drone/src/.gradle
+    commands:
+      - chmod +x ./gradlew
+      - ./gradlew testDebugUnitTest --no-daemon
+
+
+---
+
+# =====================================
+# DEV BRANCH CI (INTEGRATION)
+# =====================================
+
+kind: pipeline
+type: docker
+name: dev-ci
+
+trigger:
+  branch:
+    - dev
+  event:
+    - push
+    - pull_request
+
+steps:
+ # ------------------------
+  # Quality Gate
+ # ------------------------
+  - name: test-and-lint
+    image: ghcr.io/cirruslabs/android-sdk:34
+    environment:
+      ANDROID_HOME: /opt/android-sdk-linux
+      GRADLE_USER_HOME: /drone/src/.gradle
+    commands:
+      - chmod +x ./gradlew
+      - ./gradlew testDebugUnitTest lintDebug --no-daemon
+
+  # ------------------------
+    # Build APK (Internal QA)
+  # ------------------------
+  - name: build-debug-apk
+    image: ghcr.io/cirruslabs/android-sdk:34
+    commands:
+      - ./gradlew assembleDebug --no-daemon
+
+
+---
+
+# =========================================================
+# MAIN PIPELINE — Build + Distribute
+# =========================================================
+
+kind: pipeline
+type: docker
+name: android-ci
+
+trigger:
+  branch:
+    - main
+  event:
+    - push
+
+steps:
+
+  # ------------------------
+  # 0. Quality Gate
+  # ------------------------
   - name: test-and-lint
     image: ghcr.io/cirruslabs/android-sdk:34
     environment:
@@ -29,22 +102,6 @@ steps:
       - chmod +x ./gradlew
       - ./gradlew testDebugUnitTest lintDebug --no-daemon
 
-
-# =========================================================
-# MAIN PIPELINE — Build + Distribute
-# =========================================================
----
-kind: pipeline
-type: docker
-name: android-ci
-
-trigger:
-  branch:
-    - main
-  event:
-    - push
-
-steps:
   # ------------------------
   # 1. Build Android APK
   # ------------------------
