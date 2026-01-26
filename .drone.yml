@@ -4,6 +4,19 @@ name: android-ci
 
 steps:
   # ------------------------
+  # 0. Quality Gate (Tests + Lint)
+  # ------------------------
+  - name: test-and-lint
+    image: ghcr.io/cirruslabs/android-sdk:34
+    environment:
+      ANDROID_HOME: /opt/android-sdk-linux
+      GRADLE_USER_HOME: /drone/src/.gradle
+    commands:
+      - chmod +x ./gradlew
+      - ./gradlew testDebugUnitTest
+      - ./gradlew lintDebug
+
+  # ------------------------
   # 1. Build Android APK
   # ------------------------
   - name: build-android
