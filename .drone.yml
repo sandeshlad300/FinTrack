@@ -1,5 +1,26 @@
 kind: pipeline
 type: docker
+name: android-pr-check
+
+trigger:
+  event:
+    - pull_request
+
+steps:
+  - name: test-and-lint
+    image: ghcr.io/cirruslabs/android-sdk:34
+    environment:
+      ANDROID_HOME: /opt/android-sdk-linux
+      GRADLE_USER_HOME: /drone/src/.gradle
+    commands:
+      - chmod +x ./gradlew
+      - ./gradlew testDebugUnitTest
+      - ./gradlew lintDebug
+
+---
+
+kind: pipeline
+type: docker
 name: android-ci
 
 steps:
