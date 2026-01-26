@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
+    testImplementation(libs.truth)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -149,6 +150,7 @@ dependencies {
 
     // AndroidX test
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation(kotlin("test"))
 
 
 }
