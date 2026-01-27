@@ -20,5 +20,9 @@ sonarqube {
         property("sonar.sources", "src/main/java,src/main/kotlin")
         property("sonar.tests", "src/test/java,src/androidTest/java")
         property("sonar.java.binaries", "build/intermediates/javac")
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "${project(":app").buildDir}/reports/kover/xml/report.xml"
+        )
     }
 }

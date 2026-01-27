@@ -5,6 +5,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
+    id("org.jetbrains.kotlinx.kover")
 }
 
 android {
