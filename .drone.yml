@@ -62,15 +62,13 @@ steps:
         path: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
-      - ./gradlew \
-        testDebugUnitTest \
-        lintDebug \
-        sonar \
+        - ./gradlew testDebugUnitTest jacocoTestReport lintDebug sonar \
         -Dsonar.host.url=http://host.docker.internal:9000 \
         -Dsonar.token=$SONAR_TOKEN \
         --no-daemon
 
-  # ------------------------
+
+    # ------------------------
     # Build APK (Internal QA)
   # ------------------------
   - name: build-debug-apk
