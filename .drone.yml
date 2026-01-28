@@ -48,27 +48,17 @@ trigger:
     - pull_request
 
 steps:
-   # ------------------------
-   # Tests + Lint + Sonar
-   # ------------------------
-  - name: sonar-analysis
+ # ------------------------
+  # Quality Gate
+ # ------------------------
+  - name: test-and-lint
     image: ghcr.io/cirruslabs/android-sdk:34
     environment:
-      SONAR_TOKEN:
-        from_secret: SONAR_TOKEN
+      ANDROID_HOME: /opt/android-sdk-linux
       GRADLE_USER_HOME: /drone/src/.gradle
-    volumes:
-      - name: gradle-cache
-        path: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
-      - ./gradlew \
-        testDebugUnitTest \
-        lintDebug \
-        sonar \
-        -Dsonar.host.url=http://host.docker.internal:9000 \
-        -Dsonar.token=$SONAR_TOKEN \
-        --no-daemon
+      - ./gradlew testDebugUnitTest lintDebug --no-daemon
 
   # ------------------------
     # Build APK (Internal QA)
@@ -98,26 +88,19 @@ trigger:
 steps:
 
   # ------------------------
-  # 0. Sonar + Quality Gate
+  # 0. Quality Gate
   # ------------------------
-  - name: sonar-quality-gate
+  - name: test-and-lint
     image: ghcr.io/cirruslabs/android-sdk:34
     environment:
-      SONAR_TOKEN:
-        from_secret: SONAR_TOKEN
+      ANDROID_HOME: /opt/android-sdk-linux
       GRADLE_USER_HOME: /drone/src/.gradle
     volumes:
       - name: gradle-cache
         path: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
-      - ./gradlew \
-        testDebugUnitTest \
-        lintDebug \
-        sonar \
-        -Dsonar.host.url=http://host.docker.internal:9000 \
-        -Dsonar.token=$SONAR_TOKEN \
-        --no-daemon
+      - ./gradlew testDebugUnitTest lintDebug --no-daemon
 
   # ------------------------
   # 1. Build Android APK
