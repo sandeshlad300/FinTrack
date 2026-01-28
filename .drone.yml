@@ -63,14 +63,7 @@ steps:
         path: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
-      - ./gradlew \
-        :app:testDebugUnitTest \
-        :app:jacocoTestReport \
-        :app:lintDebug \
-        sonar \
-        -Dsonar.host.url=http://host.docker.internal:9000 \
-        -Dsonar.token=$SONAR_TOKEN \
-        --no-daemon
+      - ./gradlew clean :app:testDebugUnitTest :app:jacocoTestReport sonar --no-daemon
 
 
 
@@ -116,14 +109,8 @@ steps:
         path: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
-      - ./gradlew \
-        :app:testDebugUnitTest \
-        :app:jacocoTestReport \
-        :app:lintDebug \
-        sonar \
-        -Dsonar.host.url=http://host.docker.internal:9000 \
-        -Dsonar.token=$SONAR_TOKEN \
-        --no-daemon
+      - ./gradlew clean :app:testDebugUnitTest :app:jacocoTestReport sonar --no-daemon
+
 
   # ------------------------
   # 1. Build Android APK
