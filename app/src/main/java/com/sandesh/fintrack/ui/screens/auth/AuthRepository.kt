@@ -1,7 +1,5 @@
 package com.sandesh.fintrack.ui.screens.auth
 
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.tasks.await
 
 
 interface AuthRepository {

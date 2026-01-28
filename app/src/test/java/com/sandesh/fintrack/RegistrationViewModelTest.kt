@@ -27,6 +27,8 @@ class RegistrationViewModelTest {
         Dispatchers.resetMain()
     }
 
+
+
     @Test
     fun `login success updates state`() = runTest {
         val vm = RegistrationViewModel(FakeAuthRepository(true))

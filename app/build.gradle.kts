@@ -5,8 +5,8 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.firebase.crashlytics")
-    id("org.jetbrains.kotlinx.kover")
-}
+    id("jacoco")
+    }
 
 android {
     namespace = "com.sandesh.fintrack"
@@ -18,7 +18,6 @@ android {
         targetSdk = 35
         versionCode = 8
         versionName = "1.0.7"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
     }
@@ -33,6 +32,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            enableUnitTestCoverage = true
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -45,9 +47,9 @@ android {
         compose = true
         buildConfig = true
     }
-
-
 }
+
+
 
 dependencies {
 
@@ -65,6 +67,7 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.foundation.layout)
     testImplementation(libs.junit)
     testImplementation(libs.truth)
     androidTestImplementation(libs.androidx.junit)
@@ -154,5 +157,41 @@ dependencies {
     testImplementation(kotlin("test"))
 
 
+}
+
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    val debugTree = fileTree(
+        "${buildDir}/tmp/kotlin-classes/debug"
+    ) {
+        exclude(
+            "**/R.class",
+            "**/R$*.class",
+            "**/BuildConfig.*",
+            "**/*Test*.*"
+        )
+    }
+
+    classDirectories.setFrom(debugTree)
+    sourceDirectories.setFrom(
+        files("src/main/java", "src/main/kotlin")
+    )
+
+    executionData.setFrom(
+        fileTree(buildDir) {
+            include(
+                "jacoco/testDebugUnitTest.exec",
+                "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
+            )
+        }
+    )
 }
 

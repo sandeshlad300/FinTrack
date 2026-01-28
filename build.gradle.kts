@@ -14,15 +14,25 @@ sonarqube {
         property("sonar.projectKey", "FinTrack")
         property("sonar.projectName", "FinTrack")
         property("sonar.host.url", "http://localhost:9000")
-        property("sonar.login", providers.gradleProperty("SONAR_TOKEN").get())
+        property("sonar.token", providers.gradleProperty("SONAR_TOKEN").get())
+
 
         // Android specifics
         property("sonar.sources", "src/main/java,src/main/kotlin")
         property("sonar.tests", "src/test/java,src/androidTest/java")
         property("sonar.java.binaries", "build/intermediates/javac")
+
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
-            "${project(":app").buildDir}/reports/kover/xml/report.xml"
+            "${project(":app").buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
         )
+
+        property(
+            "sonar.exclusions",
+            "**/R.class,**/R$*.class,**/BuildConfig.*,**/Manifest*.*,**/*Test*.*"
+        )
+        property("sonar.androidLint.reportPaths", "")
+
     }
 }
+

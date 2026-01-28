@@ -1,19 +1,13 @@
 package com.sandesh.fintrack.ui.screens.auth
 
-import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import com.google.firebase.firestore.FirebaseFirestore
-import com.sandesh.fintrack.core.data.AppPreferences
+
 
 
 class RegistrationViewModel(
