@@ -48,24 +48,30 @@ trigger:
     - pull_request
 
 steps:
-   # ------------------------
-   # Tests + Lint + Sonar
-   # ------------------------
+  # ------------------------
+  # 1. Tests + Coverage + Sonar
+  # ------------------------
   - name: sonar-analysis
     image: ghcr.io/cirruslabs/android-sdk:34
     environment:
+      ANDROID_HOME: /opt/android-sdk-linux
+      GRADLE_USER_HOME: /drone/src/.gradle
       SONAR_TOKEN:
         from_secret: SONAR_TOKEN
-      GRADLE_USER_HOME: /drone/src/.gradle
     volumes:
       - name: gradle-cache
         path: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
-        - ./gradlew testDebugUnitTest jacocoTestReport lintDebug sonar \
+      - ./gradlew \
+        :app:testDebugUnitTest \
+        :app:jacocoTestReport \
+        :app:lintDebug \
+        sonar \
         -Dsonar.host.url=http://host.docker.internal:9000 \
         -Dsonar.token=$SONAR_TOKEN \
         --no-daemon
+
 
 
     # ------------------------
@@ -96,20 +102,25 @@ trigger:
 steps:
 
   # ------------------------
-  # 0. Sonar + Quality Gate
+  # 0. Tests + Coverage + Sonar
   # ------------------------
-  - name: sonar-quality-gate
+  - name: sonar-analysis
     image: ghcr.io/cirruslabs/android-sdk:34
     environment:
+      ANDROID_HOME: /opt/android-sdk-linux
+      GRADLE_USER_HOME: /drone/src/.gradle
       SONAR_TOKEN:
         from_secret: SONAR_TOKEN
-      GRADLE_USER_HOME: /drone/src/.gradle
     volumes:
       - name: gradle-cache
         path: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
-        - ./gradlew testDebugUnitTest jacocoTestReport lintDebug sonar \
+      - ./gradlew \
+        :app:testDebugUnitTest \
+        :app:jacocoTestReport \
+        :app:lintDebug \
+        sonar \
         -Dsonar.host.url=http://host.docker.internal:9000 \
         -Dsonar.token=$SONAR_TOKEN \
         --no-daemon
