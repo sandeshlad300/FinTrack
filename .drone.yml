@@ -63,7 +63,10 @@ steps:
         path: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
-      - ./gradlew clean :app:testDebugUnitTest :app:jacocoTestReport sonar --no-daemon
+      - ./gradlew clean :app:testDebugUnitTest :app:jacocoTestReport sonar \
+        -Dsonar.host.url=http://host.docker.internal:9000 \
+        -Dsonar.token=$SONAR_TOKEN \
+        --no-daemon
 
 
 
@@ -109,7 +112,10 @@ steps:
         path: /drone/src/.gradle
     commands:
       - chmod +x ./gradlew
-      - ./gradlew clean :app:testDebugUnitTest :app:jacocoTestReport sonar --no-daemon
+      - ./gradlew clean :app:testDebugUnitTest :app:jacocoTestReport sonar \
+        -Dsonar.host.url=http://host.docker.internal:9000 \
+        -Dsonar.token=$SONAR_TOKEN \
+        --no-daemon
 
 
   # ------------------------
